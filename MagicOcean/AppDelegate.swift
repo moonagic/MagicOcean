@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SafariServices
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -47,6 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        magicocean://callback?code=b86d4698ca831a35473e1b730674ceee0dbc02d33ea7534316835e006b9b61ef&state=0807edf72d85e5d
         let range = NSRange.init(location: 27, length: 64)
         code = code.substringWithRange(range)
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(kSafariViewControllerCloseNotification, object: url)
         
         weak var weakSelf = self
         Alamofire.request(.POST, OAUTH_URL+URL_OAUTHTOKEN+"?grant_type=authorization_code&code=\(code)&client_id=\(ClientID)&client_secret=\(ClientSecret)&redirect_uri=\(redirect_uri)", parameters: nil, encoding: .URL, headers: nil).responseJSON { response in

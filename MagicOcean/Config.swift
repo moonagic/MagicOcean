@@ -16,5 +16,6 @@ let BASE_URL = "https://api.digitalocean.com/v2/"
 let OAUTH_URL = "https://cloud.digitalocean.com/v1/"
 
 let URL_ACCOUNT = "account"
+let URL_OAUTH = "oauth"
 let URL_OAUTHTOKEN = "oauth/token"
 

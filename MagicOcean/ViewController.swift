@@ -8,8 +8,13 @@
 
 import UIKit
 import Alamofire
+import SafariServices
 
-class ViewController: UIViewController {
+let kSafariViewControllerCloseNotification = "kSafariViewControllerCloseNotification"
+
+class ViewController: UIViewController, SFSafariViewControllerDelegate {
+    
+    var safariVC: SFSafariViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +31,7 @@ class ViewController: UIViewController {
 //                print(str)
 //            }
 //        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.safariLogin(_:)), name: kSafariViewControllerCloseNotification, object: nil)
         
         
     }
@@ -40,15 +46,44 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func safariLogin(notification: NSNotification) {
+//        let notifUrl = notification.object as! NSURL
+//        print("\nnotifUrl: \(notifUrl)")
+//        let urlString = String(notifUrl)
+//        let code = extractCode(urlString)
+//        print("code: \(code)")
+//        self.loginWithInstagram(code!)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.safariVC!.dismissViewControllerAnimated(true, completion: nil)
+        })
+    }
+    
     @IBAction func pressed(sender: AnyObject) {
-        let authPath:String = "https://cloud.digitalocean.com/v1/oauth/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=0807edf72d85e5d"
-        print(authPath)
-        let escapedAddress:String = authPath.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        if let authURL:NSURL = NSURL(string: escapedAddress) {
-            if UIApplication.sharedApplication().openURL(authURL) {
-            }
-        }
+        let authPath:String = OAUTH_URL+URL_OAUTH+"/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=0807edf72d85e5d"
         
+        let escapedAddress:String = authPath.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        safariVC = SFSafariViewController(URL: NSURL(string: escapedAddress)!)
+        safariVC!.delegate = self
+        self.presentViewController(safariVC!, animated: true, completion: nil)
+        
+        
+//        if let authURL:NSURL = NSURL(string: escapedAddress) {
+//            if UIApplication.sharedApplication().openURL(authURL) {
+//            }
+//        }
+        
+    }
+    
+    // MARK: - SFSafariViewControllerDelegate
+    
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        controller.dismissViewControllerAnimated(true) { () -> Void in
+//            self.label.text = NSLocalizedString("You just dismissed the login view.", comment: "")
+        }
+    }
+    
+    func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+        print("didLoadSuccessfully: \(didLoadSuccessfully)")
     }
 
 
