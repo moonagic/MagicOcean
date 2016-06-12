@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -42,7 +43,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, options: [String: AnyObject]) -> Bool {
+        var code:NSString = url.absoluteString
+//        magicocean://callback?code=b86d4698ca831a35473e1b730674ceee0dbc02d33ea7534316835e006b9b61ef&state=0807edf72d85e5d
+        let range = NSRange.init(location: 27, length: 64)
+        code = code.substringWithRange(range)
         
+        weak var weakSelf = self
+        Alamofire.request(.POST, OAUTH_URL+URL_OAUTHTOKEN+"?grant_type=authorization_code&code=\(code)&client_id=\(ClientID)&client_secret=\(ClientSecret)&redirect_uri=\(redirect_uri)", parameters: nil, encoding: .URL, headers: nil).responseJSON { response in
+            if let _ = weakSelf {
+                let dic = response.result.value as! NSDictionary
+                print("response=\(dic)")
+                Account.sharedInstance.Access_Token = dic.valueForKey("access_token") as! String
+                Account.sharedInstance.Refresh_Token = dic.valueForKey("refresh_token") as! String
+                Account.sharedInstance.TokenType = dic.valueForKey("token_type") as! String
+                
+                let info = dic.valueForKey("info")
+                Account.sharedInstance.Name = info!.valueForKey("name") as! String
+                Account.sharedInstance.Email = info!.valueForKey("email") as! String
+                Account.sharedInstance.UUID = info!.valueForKey("uuid") as! String
+            }
+        }
+
         return true
     }
 

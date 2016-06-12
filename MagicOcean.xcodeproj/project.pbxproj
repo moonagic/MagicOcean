@@ -15,6 +15,7 @@
 		943FE2C61D07BEBF00877358 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943FE2C51D07BEBF00877358 /* Config.swift */; };
 		943FE2DF1D07BF1800877358 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 943FE2D21D07BF0D00877358 /* Alamofire.framework */; };
 		943FE2E01D07BF1800877358 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 943FE2D21D07BF0D00877358 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0F51D0D5FF50043E41D /* Account.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,7 @@
 		943FE2B81D07BDB900877358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		943FE2C51D07BEBF00877358 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		943FE2C71D07BF0D00877358 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../Downloads/Alamofire-master 2/Alamofire.xcodeproj"; sourceTree = "<group>"; };
+		94D1E0F51D0D5FF50043E41D /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = Data/Account.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 		943FE2AB1D07BDB900877358 /* MagicOcean */ = {
 			isa = PBXGroup;
 			children = (
+				94D1E0EE1D0D5FDA0043E41D /* Data */,
 				943FE2C41D07BEB400877358 /* Config */,
 				943FE2C31D07BE5500877358 /* Layout */,
 				943FE2C01D07BE2800877358 /* View */,
@@ -205,6 +208,14 @@
 				943FE2DE1D07BF0D00877358 /* Alamofire.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		94D1E0EE1D0D5FDA0043E41D /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				94D1E0F51D0D5FF50043E41D /* Account.swift */,
+			);
+			name = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				943FE2AF1D07BDB900877358 /* ViewController.swift in Sources */,
+				94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */,
 				943FE2AD1D07BDB900877358 /* AppDelegate.swift in Sources */,
 				943FE2C61D07BEBF00877358 /* Config.swift in Sources */,
 			);

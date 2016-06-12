@@ -29,22 +29,23 @@ class ViewController: UIViewController {
         
         
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     @IBAction func pressed(sender: AnyObject) {
-        let authPath:String = "https://cloud.digitalocean.com/v1/oauth/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=0807edf7d85e5d"
+        let authPath:String = "https://cloud.digitalocean.com/v1/oauth/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=0807edf72d85e5d"
         print(authPath)
         let escapedAddress:String = authPath.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-//        authPath = authPath.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
-//        print(authPath)
         if let authURL:NSURL = NSURL(string: escapedAddress) {
             if UIApplication.sharedApplication().openURL(authURL) {
-                print(2)
-            } else {
-                print(1)
             }
         }
         
