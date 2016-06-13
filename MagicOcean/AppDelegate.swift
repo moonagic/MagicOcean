@@ -45,11 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, options: [String: AnyObject]) -> Bool {
         var code:NSString = url.absoluteString
-//        magicocean://callback?code=b86d4698ca831a35473e1b730674ceee0dbc02d33ea7534316835e006b9b61ef&state=0807edf72d85e5d
+//        magicocean://callback?code=b86d4698ca831a35473e1b730671234e0dbc02d33ea7534316835e006b9b61ef&state=0807edf72d85e5d
         let range = NSRange.init(location: 27, length: 64)
         code = code.substringWithRange(range)
-        
-        NSNotificationCenter.defaultCenter().postNotificationName(kSafariViewControllerCloseNotification, object: url)
         
         weak var weakSelf = self
         Alamofire.request(.POST, OAUTH_URL+URL_OAUTHTOKEN+"?grant_type=authorization_code&code=\(code)&client_id=\(ClientID)&client_secret=\(ClientSecret)&redirect_uri=\(redirect_uri)", parameters: nil, encoding: .URL, headers: nil).responseJSON { response in
@@ -64,6 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 Account.sharedInstance.Name = info!.valueForKey("name") as! String
                 Account.sharedInstance.Email = info!.valueForKey("email") as! String
                 Account.sharedInstance.UUID = info!.valueForKey("uuid") as! String
+                
+                Account.sharedInstance.saveUser()
+                NSNotificationCenter.defaultCenter().postNotificationName(kSafariViewControllerCloseNotification, object: url)
             }
         }
 

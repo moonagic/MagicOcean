@@ -4,6 +4,7 @@ use_frameworks!
 def pods
   pod 'Alamofire'
   pod 'Kingfisher'
+  pod 'MJRefresh'
 end
 
 target 'MagicOcean' do

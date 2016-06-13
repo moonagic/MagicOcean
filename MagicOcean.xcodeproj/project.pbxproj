@@ -13,8 +13,10 @@
 		943FE2B71D07BDB900877358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B51D07BDB900877358 /* LaunchScreen.storyboard */; };
 		94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0F51D0D5FF50043E41D /* Account.swift */; };
 		94D1E0F91D0E4C980043E41D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0F81D0E4C980043E41D /* Config.swift */; };
-		94D1E0FB1D0E4CA30043E41D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0FA1D0E4CA30043E41D /* ViewController.swift */; };
+		94D1E0FB1D0E4CA30043E41D /* DropletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0FA1D0E4CA30043E41D /* DropletsViewController.swift */; };
 		94D1E0FD1D0E4CB40043E41D /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0FC1D0E4CB40043E41D /* Login.swift */; };
+		94D3B4A01D0E6C42001E8807 /* DropletsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3B49F1D0E6C42001E8807 /* DropletsCell.swift */; };
+		94D3B4A31D0E7639001E8807 /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3B4A21D0E7639001E8807 /* AccountController.swift */; };
 		C11004C58401747FB8306EA5 /* Pods_MagicOcean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDEBBCB4B4AB0BA61DDB4AA /* Pods_MagicOcean.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,8 +31,11 @@
 		943FE2B81D07BDB900877358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94D1E0F51D0D5FF50043E41D /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = Data/Account.swift; sourceTree = "<group>"; };
 		94D1E0F81D0E4C980043E41D /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Config/Config.swift; sourceTree = "<group>"; };
-		94D1E0FA1D0E4CA30043E41D /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ViewControllers/ViewController.swift; sourceTree = "<group>"; };
+		94D1E0FA1D0E4CA30043E41D /* DropletsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropletsViewController.swift; path = ViewControllers/DropletsViewController.swift; sourceTree = "<group>"; };
 		94D1E0FC1D0E4CB40043E41D /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Login.swift; path = ViewControllers/Login/Login.swift; sourceTree = "<group>"; };
+		94D3B49F1D0E6C42001E8807 /* DropletsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropletsCell.swift; path = View/DropletsCell.swift; sourceTree = "<group>"; };
+		94D3B4A21D0E7639001E8807 /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = ViewControllers/Account/AccountController.swift; sourceTree = "<group>"; };
+		94D3B4A41D0E7B6C001E8807 /* MagicOcean-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicOcean-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		DBDEBBCB4B4AB0BA61DDB4AA /* Pods_MagicOcean.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagicOcean.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -77,11 +82,11 @@
 			isa = PBXGroup;
 			children = (
 				94D1E0EE1D0D5FDA0043E41D /* Data */,
+				943FE2BE1D07BE0000877358 /* Tools */,
 				943FE2C41D07BEB400877358 /* Config */,
 				943FE2C31D07BE5500877358 /* Layout */,
 				943FE2C01D07BE2800877358 /* View */,
 				943FE2BF1D07BE0600877358 /* ViewControllers */,
-				943FE2BE1D07BE0000877358 /* Tools */,
 				943FE2C11D07BE3000877358 /* Supporting Files */,
 			);
 			path = MagicOcean;
@@ -97,8 +102,9 @@
 		943FE2BF1D07BE0600877358 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				94D3B4A11D0E761E001E8807 /* Account */,
 				94D1E0F71D0E4C150043E41D /* Login */,
-				94D1E0FA1D0E4CA30043E41D /* ViewController.swift */,
+				94D1E0FA1D0E4CA30043E41D /* DropletsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -106,6 +112,7 @@
 		943FE2C01D07BE2800877358 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				94D3B49F1D0E6C42001E8807 /* DropletsCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -116,6 +123,7 @@
 				943FE2AC1D07BDB900877358 /* AppDelegate.swift */,
 				943FE2B31D07BDB900877358 /* Assets.xcassets */,
 				943FE2B81D07BDB900877358 /* Info.plist */,
+				94D3B4A41D0E7B6C001E8807 /* MagicOcean-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -151,6 +159,14 @@
 				94D1E0FC1D0E4CB40043E41D /* Login.swift */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		94D3B4A11D0E761E001E8807 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				94D3B4A21D0E7639001E8807 /* AccountController.swift */,
+			);
+			name = Account;
 			sourceTree = "<group>";
 		};
 		9F341F53EBA485B090A259AB /* Frameworks */ = {
@@ -286,9 +302,11 @@
 			files = (
 				94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */,
 				94D1E0FD1D0E4CB40043E41D /* Login.swift in Sources */,
+				94D3B4A01D0E6C42001E8807 /* DropletsCell.swift in Sources */,
 				943FE2AD1D07BDB900877358 /* AppDelegate.swift in Sources */,
-				94D1E0FB1D0E4CA30043E41D /* ViewController.swift in Sources */,
+				94D1E0FB1D0E4CA30043E41D /* DropletsViewController.swift in Sources */,
 				94D1E0F91D0E4C980043E41D /* Config.swift in Sources */,
+				94D3B4A31D0E7639001E8807 /* AccountController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +426,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moonagic.magicocean;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Debug;
 		};
@@ -422,6 +441,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moonagic.magicocean;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
