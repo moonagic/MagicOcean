@@ -19,5 +19,6 @@ let URL_OAUTH = "oauth"
 let URL_OAUTHTOKEN = "oauth/token"
 
 let URL_DROPLETS = "droplets"
+let URL_ACTIONS = "actions"
 
 

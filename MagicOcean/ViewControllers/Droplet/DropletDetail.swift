@@ -13,6 +13,9 @@ import MBProgressHUD
 
 class DropletDetail: UITableViewController {
     
+    var droplet:NSDictionary!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -38,6 +41,7 @@ class DropletDetail: UITableViewController {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
                 let droplet:NSDictionary = (dic.valueForKey("droplet") as? NSDictionary)!
+                self.droplet = droplet
                 dispatch_async(dispatch_get_main_queue(), {
                     self.title = droplet.valueForKey("name") as? String
                 })
@@ -56,16 +60,29 @@ class DropletDetail: UITableViewController {
         // Reboot
         let dateAction = UIAlertAction(title: "Reboot", style: .Default) { (action:UIAlertAction!) in
             print("you have pressed the Reboot button");
+            self.dropletActions("reboot")
         }
         alertController.addAction(dateAction)
         // Power Off
-        let iOSAction = UIAlertAction(title: "Power Off", style: .Default) { (action:UIAlertAction!) in
-            print("you have pressed the Power Off button");
+        let status:String = droplet.valueForKey("status") as! String
+        if status == "off" {
+            let powerAction = UIAlertAction(title: "Power On", style: .Default) { (action:UIAlertAction!) in
+                print("you have pressed the Power On button");
+                self.dropletActions("power_on")
+            }
+            alertController.addAction(powerAction)
+        } else if status == "active" {
+            let powerAction = UIAlertAction(title: "Power Off", style: .Default) { (action:UIAlertAction!) in
+                print("you have pressed the Power Off button");
+                self.dropletActions("power_off")
+            }
+            alertController.addAction(powerAction)
         }
-        alertController.addAction(iOSAction)
+        
         // Power Cycle
         let androidAction = UIAlertAction(title: "Power Cycle", style: .Default) { (action:UIAlertAction!) in
             print("you have pressed the Power Cycle button");
+            self.dropletActions("power_cycle")
         }
         alertController.addAction(androidAction)
         
@@ -81,5 +98,31 @@ class DropletDetail: UITableViewController {
         
         self.presentViewController(alertController, animated: true, completion:nil)
     }
+    
+    func dropletActions(type: String) {
+        let Headers = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+Account.sharedInstance.Access_Token
+        ]
+        
+        let parameters:[String: AnyObject] = [
+            "type": type
+        ]
+        
+        weak var weakSelf = self
+        print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS)
+        Alamofire.request(.POST, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
+            if let _ = weakSelf {
+                let dic = response.result.value as! NSDictionary
+                print("response=\(dic)")
+//                let droplet:NSDictionary = (dic.valueForKey("droplet") as? NSDictionary)!
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    self.title = droplet.valueForKey("name") as? String
+//                })
+            }
+        }
+        
+    }
+    
     
 }
