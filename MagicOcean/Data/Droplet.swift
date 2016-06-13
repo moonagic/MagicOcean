@@ -13,10 +13,7 @@ class Droplet {
     static let sharedInstance = Droplet()
     private init() {}
     
-    
     var ID:Int = 0
     var Name:String = ""
-    
-    
     
 }

@@ -5,6 +5,8 @@ def pods
   pod 'Alamofire'
   pod 'Kingfisher'
   pod 'MJRefresh'
+  pod 'Toast-Swift'
+  pod 'MBProgressHUD'
 end
 
 target 'MagicOcean' do

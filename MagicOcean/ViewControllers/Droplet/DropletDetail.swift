@@ -8,6 +8,8 @@
 
 import UIKit
 import Alamofire
+import Toast_Swift
+import MBProgressHUD
 
 class DropletDetail: UITableViewController {
     
@@ -44,6 +46,11 @@ class DropletDetail: UITableViewController {
     }
 
     @IBAction func actionPressed(sender: AnyObject) {
+//        self.view.window!.makeToast("test", duration: 0.5, position: .Center)
+//        self.view.window!.makeToastActivity(.Center)
+//        MBProgressHUD.showHUDAddedTo(self.view.window, animated: true)
+        
+        
         let alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
         
         // Reboot
