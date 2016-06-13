@@ -13,10 +13,9 @@ class DropletsCell: UITableViewCell {
     @IBOutlet weak var subView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var IPLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-//        subView.layer.masksToBounds = true
-//        subView.layer.cornerRadius = 8
     }
 }

@@ -19,6 +19,12 @@ class Account {
     var Refresh_Token = ""
     var TokenType = ""
     
+    var EmailVerfied = 0
+    var LimitofDroplet = 0
+    var LimitofFloatingIP = 0
+    var AccountStatus = ""
+    
+    
     func saveUser() {
         NSUserDefaults().setObject(Name, forKey: "Name")
         NSUserDefaults().setObject(Access_Token, forKey: "Access_Token")
@@ -26,6 +32,11 @@ class Account {
         NSUserDefaults().setObject(Email, forKey: "Email")
         NSUserDefaults().setObject(Refresh_Token, forKey: "Refresh_Token")
         NSUserDefaults().setObject(TokenType, forKey: "TokenType")
+        
+        NSUserDefaults().setInteger(EmailVerfied, forKey: "EmailVerfied")
+        NSUserDefaults().setInteger(LimitofDroplet, forKey: "LimitofDroplet")
+        NSUserDefaults().setInteger(LimitofFloatingIP, forKey: "LimitofFloatingIP")
+        NSUserDefaults().setObject(AccountStatus, forKey: "AccountStatus")
     }
     
     func logoutUser() {
@@ -35,6 +46,11 @@ class Account {
         NSUserDefaults().setObject("", forKey: "Email")
         NSUserDefaults().setObject("", forKey: "Refresh_Token")
         NSUserDefaults().setObject("", forKey: "TokenType")
+        
+        NSUserDefaults().setInteger(0, forKey: "EmailVerfied")
+        NSUserDefaults().setInteger(0, forKey: "LimitofDroplet")
+        NSUserDefaults().setInteger(0, forKey: "LimitofFloatingIP")
+        NSUserDefaults().setObject("", forKey: "AccountStatus")
     }
     
     func loadUser() {
@@ -55,6 +71,18 @@ class Account {
         }
         if let result:String = NSUserDefaults().objectForKey("TokenType") as? String {
             TokenType = result
+        }
+        if let result:String = NSUserDefaults().objectForKey("AccountStatus") as? String {
+            AccountStatus = result
+        }
+        if let result:Int = NSUserDefaults().integerForKey("EmailVerfied") {
+            EmailVerfied = result
+        }
+        if let result:Int = NSUserDefaults().integerForKey("LimitofDroplet") {
+            LimitofDroplet = result
+        }
+        if let result:Int = NSUserDefaults().integerForKey("LimitofFloatingIP") {
+            LimitofFloatingIP = result
         }
     }
     

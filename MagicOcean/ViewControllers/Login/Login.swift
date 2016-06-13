@@ -44,7 +44,7 @@ class Login: UIViewController, SFSafariViewControllerDelegate {
     }
     
     @IBAction func pressed(sender: AnyObject) {
-        let authPath:String = OAUTH_URL+URL_OAUTH+"/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=0807edf72d85e5d"
+        let authPath:String = OAUTH_URL+URL_OAUTH+"/authorize?response_type=code&client_id=\(ClientID)&redirect_uri=\(redirect_uri)&scope=read write&state=\(getRandomStringOfLength(12))"
         
         let escapedAddress:String = authPath.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         safariViewController = SFSafariViewController(URL: NSURL(string: escapedAddress)!)

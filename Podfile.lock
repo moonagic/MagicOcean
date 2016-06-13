@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (3.4.0)
+  - Alamofire (3.4.1)
   - Kingfisher (2.4.1)
   - MJRefresh (3.1.1)
 
@@ -9,7 +9,7 @@ DEPENDENCIES:
   - MJRefresh
 
 SPEC CHECKSUMS:
-  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   MJRefresh: 70a47c5543b567cdaf70ead5a6e99ce820652eb9
 

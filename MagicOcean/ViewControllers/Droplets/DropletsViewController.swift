@@ -21,7 +21,6 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
         self.navigationController!.navigationBar.barTintColor = UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController!.navigationBar.barStyle = UIBarStyle.Black
@@ -47,7 +46,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         Account.sharedInstance.loadUser()
         if Account.sharedInstance.Access_Token != "" {
             if needReload {
-                self.loadDroplets(0, per_page:10)
+                self.tableView.mj_header.beginRefreshing()
                 needReload = false
             }
         } else {
@@ -94,14 +93,23 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         let sizeSlug:String = sizeDic.valueForKey("slug") as! String
         let disksizeSlug:Int = sizeDic.valueForKey("disk") as! Int
         
-        
         cell.infoLabel.text = "\(imageSlug) - \(regionSlug) - \(sizeSlug) - \(disksizeSlug)G"
+        
+        let networks:NSDictionary = dic.valueForKey("networks") as! NSDictionary
+        let v4:NSArray = networks.valueForKey("v4") as! NSArray
+        let publicIP:String = v4[0].valueForKey("ip_address") as! String
+        
+        cell.IPLabel.text = "Public IP: \(publicIP)"
+        
         
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        let dic:NSDictionary = data.objectAtIndex(indexPath.row) as! NSDictionary
+        Droplet.sharedInstance.ID = dic.valueForKey("id") as! Int
+        Droplet.sharedInstance.Name = dic.valueForKey("name") as! String
+        self.performSegueWithIdentifier("showdropletdetail", sender: nil)
     }
     
     func loadDroplets(page: Int, per_page: Int) {
