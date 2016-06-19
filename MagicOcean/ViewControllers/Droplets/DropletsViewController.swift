@@ -101,7 +101,6 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         
         cell.IPLabel.text = "Public IP: \(publicIP)"
         
-        
         return cell
     }
     

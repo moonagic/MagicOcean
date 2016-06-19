@@ -54,13 +54,13 @@ class DropletDetail: UITableViewController {
 //        self.view.window!.makeToastActivity(.Center)
 //        MBProgressHUD.showHUDAddedTo(self.view.window, animated: true)
         
-        
+        weak var weakSelf = self
         let alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
         
         // Reboot
         let dateAction = UIAlertAction(title: "Reboot", style: .Default) { (action:UIAlertAction!) in
             print("you have pressed the Reboot button");
-            self.dropletActions("reboot")
+            weakSelf!.dropletActions("reboot")
         }
         alertController.addAction(dateAction)
         // Power Off
@@ -68,13 +68,13 @@ class DropletDetail: UITableViewController {
         if status == "off" {
             let powerAction = UIAlertAction(title: "Power On", style: .Default) { (action:UIAlertAction!) in
                 print("you have pressed the Power On button");
-                self.dropletActions("power_on")
+                weakSelf!.dropletActions("power_on")
             }
             alertController.addAction(powerAction)
         } else if status == "active" {
             let powerAction = UIAlertAction(title: "Power Off", style: .Default) { (action:UIAlertAction!) in
                 print("you have pressed the Power Off button");
-                self.dropletActions("power_off")
+                weakSelf!.dropletActions("power_off")
             }
             alertController.addAction(powerAction)
         }
@@ -82,7 +82,7 @@ class DropletDetail: UITableViewController {
         // Power Cycle
         let androidAction = UIAlertAction(title: "Power Cycle", style: .Default) { (action:UIAlertAction!) in
             print("you have pressed the Power Cycle button");
-            self.dropletActions("power_cycle")
+            weakSelf!.dropletActions("power_cycle")
         }
         alertController.addAction(androidAction)
         
@@ -105,7 +105,7 @@ class DropletDetail: UITableViewController {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
-        let parameters:[String: AnyObject] = [
+        let parameters = [
             "type": type
         ]
         
@@ -121,6 +121,10 @@ class DropletDetail: UITableViewController {
 //                })
             }
         }
+        
+    }
+    
+    func deleteDroplet() {
         
     }
     
