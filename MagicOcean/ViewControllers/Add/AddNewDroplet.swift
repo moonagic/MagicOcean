@@ -146,7 +146,6 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     // MARK: - delegate of SizeTableView
     func didSelectSize(size: NSDictionary) {
-        print(size)
         self.sizeDic = size
         weak var weakSelf = self
         dispatch_async(dispatch_get_main_queue()) {
