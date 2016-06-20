@@ -36,3 +36,12 @@ func makeTextToast(message: String, view: UIView) {
     hud.removeFromSuperViewOnHide = true
     hud.hide(true, afterDelay: 1)
 }
+
+func setStatusBarAndNavigationBar(navigation: UINavigationController) {
+    navigation.navigationBar.barTintColor = UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
+    navigation.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+    navigation.navigationBar.barStyle = UIBarStyle.Black
+    navigation.navigationBar.tintColor = UIColor.whiteColor()
+    navigation.navigationBar.translucent = false
+}
+

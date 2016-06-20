@@ -35,15 +35,30 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController!.navigationBar.barTintColor = UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
-        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        self.navigationController!.navigationBar.barStyle = UIBarStyle.Black
-        self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
-        self.navigationController!.navigationBar.translucent = false
+        setStatusBarAndNavigationBar(self.navigationController!)
         
         self.hostnameField.delegate = self
+        self.hostnameField.becomeFirstResponder()
         
+        if let result:NSData = NSUserDefaults().objectForKey("sizes") as? NSData {
+            let sizes:NSMutableArray = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+            self.sizeDic = sizes[0] as! NSDictionary
+            let memory:Int = self.sizeDic.valueForKey("memory") as! Int
+            let price:Float = self.sizeDic.valueForKey("price_monthly") as! Float
+            let disk:Int = self.sizeDic.valueForKey("disk") as! Int
+            let transfer:Int = self.sizeDic.valueForKey("transfer") as! Int
+            let vcpus:Int = self.sizeDic.valueForKey("vcpus") as! Int
+            
+            self.priceLabel.text = "$\(String(format: "%.2f", price))"
+            self.memoryAndCPULabel.text = "\(memory)MB / \(vcpus)CPUs"
+            self.diskLabel.text = "\(disk)GB SSD"
+            self.transferLabel.text = "Transfer \(transfer)TB"
+        } else {
+            self.priceLabel.text = "$ 0.00"
+            self.memoryAndCPULabel.text = "0MB / 0CPUs"
+            self.diskLabel.text = "0GB SSD"
+            self.transferLabel.text = "Transfer 0TB"
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -212,6 +227,9 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if string.characters.count == 0 {
+            return true
+        }
         let nStr:NSString = NSString(format: "\(string)")
         
         let uchar:unichar = nStr.characterAtIndex(0)
