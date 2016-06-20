@@ -41,6 +41,8 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.translucent = false
         
+        self.hostnameField.delegate = self
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -98,8 +100,6 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
                 
-                
-                
 //                let arr:NSArray = dic.valueForKey("ssh_keys") as! NSArray
 //                if let localArr:NSArray = arr {
 //                    
@@ -146,6 +146,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     // MARK: - delegate of SizeTableView
     func didSelectSize(size: NSDictionary) {
+        print(size)
         self.sizeDic = size
         weak var weakSelf = self
         dispatch_async(dispatch_get_main_queue()) {
@@ -178,7 +179,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         }
     }
     
-    // MARK: -delegate of SSHKeyTableView
+    // MARK: - delegate of SSHKeyTableView
     func didSelectSSHKey(key: NSDictionary) {
         self.sshkeyDic = key
         weak var weakSelf = self
@@ -187,6 +188,12 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
                 strongSelf.SSHKeyField.text = key.valueForKey("name") as? String
             }
         }
+    }
+    
+    // MARK: - delegate of UITextField
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
 }

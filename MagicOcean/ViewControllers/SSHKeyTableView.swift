@@ -102,6 +102,7 @@ class SSHKeyTableView: UITableViewController {
                 print("response=\(dic)")
                 
                 let arr:NSArray = dic.valueForKey("ssh_keys") as! NSArray
+                strongSelf.data.removeAllObjects()
                 if let localArr:NSArray = arr {
                     
                     for index in 1...localArr.count {
