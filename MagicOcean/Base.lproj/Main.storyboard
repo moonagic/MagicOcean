@@ -1256,7 +1256,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jb2-be-zd9">
-                                            <rect key="frame" x="8" y="13" width="551" height="17"/>
+                                            <rect key="frame" x="16" y="13" width="543" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1264,7 +1264,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Jb2-be-zd9" firstAttribute="trailing" secondItem="pyl-Vm-bH6" secondAttribute="trailingMargin" id="2Wh-GQ-jFr"/>
-                                        <constraint firstItem="Jb2-be-zd9" firstAttribute="leading" secondItem="pyl-Vm-bH6" secondAttribute="leadingMargin" id="Eq1-kO-UNw"/>
+                                        <constraint firstItem="Jb2-be-zd9" firstAttribute="leading" secondItem="pyl-Vm-bH6" secondAttribute="leadingMargin" constant="8" id="Eq1-kO-UNw"/>
                                         <constraint firstItem="Jb2-be-zd9" firstAttribute="centerY" secondItem="pyl-Vm-bH6" secondAttribute="centerY" id="bHu-Xq-clM"/>
                                     </constraints>
                                 </tableViewCellContentView>

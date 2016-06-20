@@ -81,6 +81,18 @@ class SSHKeyTableView: UITableViewController {
         }
     }
     
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            // delete key
+            let dic = self.data.objectAtIndex(indexPath.row)
+            self.deleteKey(dic.valueForKey("id") as! Int)
+        }
+    }
+    
     @IBAction func cancellPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true) {
             
@@ -95,7 +107,7 @@ class SSHKeyTableView: UITableViewController {
         ]
         
         weak var weakSelf = self
-        print(BASE_URL+URL_ACCOUNT+URL_KEYS)
+        
         Alamofire.request(.GET, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
@@ -104,15 +116,34 @@ class SSHKeyTableView: UITableViewController {
                 let arr:NSArray = dic.valueForKey("ssh_keys") as! NSArray
                 strongSelf.data.removeAllObjects()
                 if let localArr:NSArray = arr {
-                    
-                    for index in 1...localArr.count {
-                        strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                    if localArr.count > 0 {
+                        for index in 1...localArr.count {
+                            strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                        }
                     }
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
                 })
+            }
+        }
+    }
+    
+    func deleteKey(key: Int) {
+//        curl -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" "https://api.digitalocean.com/v2/account/keys/512190"
+        let Headers = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+Account.sharedInstance.Access_Token
+        ]
+        
+        weak var weakSelf = self
+        
+        Alamofire.request(.DELETE, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS+"/\(key)", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+            if let strongSelf = weakSelf {
+                if response.result.isSuccess {
+                    strongSelf.loadSSHKeys()
+                }
             }
         }
     }
