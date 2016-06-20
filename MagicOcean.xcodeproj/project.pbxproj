@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9430C2501D167EAE0033F819 /* AddNewDroplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C24F1D167EAE0033F819 /* AddNewDroplet.swift */; };
+		9430C2521D16A9F20033F819 /* ImageTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2511D16A9F20033F819 /* ImageTableView.swift */; };
+		9430C2541D16AA0E0033F819 /* SizeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2531D16AA0E0033F819 /* SizeTableView.swift */; };
+		9430C2561D16AA1D0033F819 /* RegionTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2551D16AA1D0033F819 /* RegionTableView.swift */; };
+		9430C2581D16AA290033F819 /* SSHKeyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2571D16AA290033F819 /* SSHKeyTableView.swift */; };
+		9430C25A1D16B0460033F819 /* AddNewSSHKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2591D16B0460033F819 /* AddNewSSHKey.swift */; };
 		943FE2AD1D07BDB900877358 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943FE2AC1D07BDB900877358 /* AppDelegate.swift */; };
 		943FE2B21D07BDB900877358 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B01D07BDB900877358 /* Main.storyboard */; };
 		943FE2B41D07BDB900877358 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B31D07BDB900877358 /* Assets.xcassets */; };
@@ -26,6 +32,12 @@
 /* Begin PBXFileReference section */
 		388827E9E6C6D01607D0C00D /* Pods-MagicOcean.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicOcean.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagicOcean/Pods-MagicOcean.release.xcconfig"; sourceTree = "<group>"; };
 		7813C4F4B9350F5BD05753C3 /* Pods-MagicOcean.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicOcean.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagicOcean/Pods-MagicOcean.debug.xcconfig"; sourceTree = "<group>"; };
+		9430C24F1D167EAE0033F819 /* AddNewDroplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddNewDroplet.swift; path = ViewControllers/Add/AddNewDroplet.swift; sourceTree = "<group>"; };
+		9430C2511D16A9F20033F819 /* ImageTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageTableView.swift; path = ViewControllers/ImageTableView.swift; sourceTree = "<group>"; };
+		9430C2531D16AA0E0033F819 /* SizeTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SizeTableView.swift; path = ViewControllers/SizeTableView.swift; sourceTree = "<group>"; };
+		9430C2551D16AA1D0033F819 /* RegionTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegionTableView.swift; path = ViewControllers/RegionTableView.swift; sourceTree = "<group>"; };
+		9430C2571D16AA290033F819 /* SSHKeyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSHKeyTableView.swift; path = ViewControllers/SSHKeyTableView.swift; sourceTree = "<group>"; };
+		9430C2591D16B0460033F819 /* AddNewSSHKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddNewSSHKey.swift; path = ViewControllers/AddNewSSHKey.swift; sourceTree = "<group>"; };
 		943FE2A91D07BDB800877358 /* MagicOcean.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicOcean.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		943FE2AC1D07BDB900877358 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		943FE2B11D07BDB900877358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -66,6 +78,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9430C24E1D167E8D0033F819 /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				9430C24F1D167EAE0033F819 /* AddNewDroplet.swift */,
+			);
+			name = Add;
+			sourceTree = "<group>";
+		};
 		943FE2A01D07BDB800877358 = {
 			isa = PBXGroup;
 			children = (
@@ -90,9 +110,9 @@
 				94D1E0EE1D0D5FDA0043E41D /* Data */,
 				943FE2BE1D07BE0000877358 /* Tools */,
 				943FE2C41D07BEB400877358 /* Config */,
-				943FE2C31D07BE5500877358 /* Layout */,
 				943FE2C01D07BE2800877358 /* View */,
 				943FE2BF1D07BE0600877358 /* ViewControllers */,
+				943FE2C31D07BE5500877358 /* Layout */,
 				943FE2C11D07BE3000877358 /* Supporting Files */,
 			);
 			path = MagicOcean;
@@ -109,10 +129,16 @@
 		943FE2BF1D07BE0600877358 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9430C24E1D167E8D0033F819 /* Add */,
 				94D3B4A91D0E80B0001E8807 /* Droplets */,
 				94D3B4A61D0E7EFF001E8807 /* Droplet */,
 				94D3B4A11D0E761E001E8807 /* Account */,
 				94D1E0F71D0E4C150043E41D /* Login */,
+				9430C2511D16A9F20033F819 /* ImageTableView.swift */,
+				9430C2531D16AA0E0033F819 /* SizeTableView.swift */,
+				9430C2551D16AA1D0033F819 /* RegionTableView.swift */,
+				9430C2571D16AA290033F819 /* SSHKeyTableView.swift */,
+				9430C2591D16B0460033F819 /* AddNewSSHKey.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -326,14 +352,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */,
+				9430C2521D16A9F20033F819 /* ImageTableView.swift in Sources */,
 				94D1E0FD1D0E4CB40043E41D /* Login.swift in Sources */,
 				94D3B4A01D0E6C42001E8807 /* DropletsCell.swift in Sources */,
 				94D3B4AD1D0E80F0001E8807 /* DropletDetail.swift in Sources */,
 				94D3B4B51D0E8D29001E8807 /* Droplet.swift in Sources */,
+				9430C2541D16AA0E0033F819 /* SizeTableView.swift in Sources */,
+				9430C25A1D16B0460033F819 /* AddNewSSHKey.swift in Sources */,
+				9430C2581D16AA290033F819 /* SSHKeyTableView.swift in Sources */,
+				9430C2561D16AA1D0033F819 /* RegionTableView.swift in Sources */,
 				943FE2AD1D07BDB900877358 /* AppDelegate.swift in Sources */,
 				94D1E0F91D0E4C980043E41D /* Config.swift in Sources */,
 				94D3B4A31D0E7639001E8807 /* AccountController.swift in Sources */,
 				94D3B4AB1D0E80E9001E8807 /* DropletsViewController.swift in Sources */,
+				9430C2501D167EAE0033F819 /* AddNewDroplet.swift in Sources */,
 				94D3B4B11D0E8191001E8807 /* Tools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

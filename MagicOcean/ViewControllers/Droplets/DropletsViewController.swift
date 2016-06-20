@@ -130,5 +130,10 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
     }
+    
+    @IBAction func addPressed(sender: AnyObject) {
+        // pressed the add button
+        
+    }
 }
 
