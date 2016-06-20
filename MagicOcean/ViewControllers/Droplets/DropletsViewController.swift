@@ -14,7 +14,7 @@ import MJRefresh
 class DropletsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-    var data:NSArray = []
+    var data:NSMutableArray = []
     var needReload:Bool = true
     
     
@@ -122,7 +122,12 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
             if let _ = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
-                self.data = (dic.valueForKey("droplets") as? NSArray)!
+                if page == 1 {
+                    self.data.removeAllObjects()
+                }
+                if let droplets:NSArray = (dic.valueForKey("droplets") as? NSArray)! {
+                    self.data = droplets.mutableCopy() as! NSMutableArray
+                }
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.mj_header.endRefreshing()
                     self.tableView.reloadData()

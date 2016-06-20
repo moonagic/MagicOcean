@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MBProgressHUD
 
 
 let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -25,4 +26,13 @@ func getRandomStringOfLength(length: Int) -> String {
     }
     return ranStr
     
+}
+
+func makeTextToast(message: String, view: UIView) {
+    let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+    hud.mode = MBProgressHUDMode.Text
+    hud.labelText = message
+    hud.margin = 10
+    hud.removeFromSuperViewOnHide = true
+    hud.hide(true, afterDelay: 1)
 }

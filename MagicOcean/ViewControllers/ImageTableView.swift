@@ -52,8 +52,12 @@ class ImageTableView: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.tableView.mj_header.beginRefreshing()
+        if let result:NSData = NSUserDefaults().objectForKey("images") as? NSData {
+            
+            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+        } else {
+            self.tableView.mj_header.beginRefreshing()
+        }
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -119,6 +123,8 @@ class ImageTableView: UITableViewController {
                             strongSelf.data.addObject(localArr.objectAtIndex(index-1))
                         }
                     }
+                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
+                    NSUserDefaults().setObject(nsData, forKey: "images")
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     strongSelf.tableView.reloadData()

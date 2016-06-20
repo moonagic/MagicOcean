@@ -176,18 +176,25 @@ class DropletDetail: UITableViewController {
         weak var weakSelf = self
         print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/")
         Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
-            if let _ = weakSelf {
-                if response.result.isSuccess {
-                    
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            
+            if let strongSelf = weakSelf {
+                if response.response?.statusCode == 204 {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        strongSelf.navigationController?.popViewControllerAnimated(true)
+                    })
+                } else if response.response?.statusCode == 442 {
                     let dic = response.result.value as! NSDictionary
                     print("response=\(dic)")
-//                    strongSelf.dismissViewControllerAnimated(true, completion: { 
-//                        
-//                    })
-                } else {
-                    
+                    if let message = dic.valueForKey("message") {
+                        makeTextToast(message as! String, view: strongSelf.view.window!)
+                    }
                 }
             }
+            
         }
     }
     

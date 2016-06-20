@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import MBProgressHUD
 
 class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDelegate, SelectSizeDelegate, SelectRegionDelegate, SelectSSHKeyDelegate {
 
@@ -69,6 +70,23 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
+        if self.hostnameField.text == "" {
+            makeTextToast("Hostname can not be blank!", view: self.view.window!)
+            return
+        }
+        if self.sizeDic == nil {
+            makeTextToast("You must select size!", view: self.view.window!)
+            return
+        }
+        if self.imageDic == nil {
+            makeTextToast("You must select image!", view: self.view.window!)
+            return
+        }
+        if self.regionDic == nil {
+            makeTextToast("You must select region!", view: self.view.window!)
+            return
+        }
+        
         let name:String = self.hostnameField.text!
         let size:String = self.sizeDic.valueForKey("slug") as! String
         let image:String = self.imageDic.valueForKey("slug") as! String
@@ -96,21 +114,19 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         weak var weakSelf = self
         print(BASE_URL+URL_ACCOUNT+URL_KEYS)
         Alamofire.request(.POST, BASE_URL+URL_DROPLETS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
-            if let _ = weakSelf {
+            if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
-                
-//                let arr:NSArray = dic.valueForKey("ssh_keys") as! NSArray
-//                if let localArr:NSArray = arr {
-//                    
-//                    for index in 1...localArr.count {
-//                        strongSelf.data.addObject(localArr.objectAtIndex(index-1))
-//                    }
-//                }
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    strongSelf.tableView.reloadData()
-//                    strongSelf.tableView.mj_header.endRefreshing()
-//                })
+                dispatch_async(dispatch_get_main_queue(), { 
+                    if let message = dic.valueForKey("message") {
+                        print(message)
+                        makeTextToast(message as! String, view: strongSelf.view.window!)
+                    } else {
+                        strongSelf.dismissViewControllerAnimated(true, completion: {
+                            
+                        })
+                    }
+                })
             }
         }
     }
@@ -193,6 +209,27 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let nStr:NSString = NSString(format: "\(string)")
+        
+        let uchar:unichar = nStr.characterAtIndex(0)
+        
+        if uchar >= NSString(format: "a").characterAtIndex(0) && uchar <= NSString(format: "z").characterAtIndex(0) {
+            return true
+        }
+        if uchar >= NSString(format: "A").characterAtIndex(0) && uchar <= NSString(format: "Z").characterAtIndex(0) {
+            return true
+        }
+        if uchar >= NSString(format: "1").characterAtIndex(0) && uchar <= NSString(format: "0").characterAtIndex(0) {
+            return true
+        }
+        if uchar == NSString(format: "-").characterAtIndex(0) {
+            return true
+        }
+        
+        return false
     }
     
 }

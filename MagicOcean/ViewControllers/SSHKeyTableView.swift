@@ -35,7 +35,12 @@ class SSHKeyTableView: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.mj_header.beginRefreshing()
+        if let result:NSData = NSUserDefaults().objectForKey("keys") as? NSData {
+            
+            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+        } else {
+            self.tableView.mj_header.beginRefreshing()
+        }
     }
     
     func setupMJRefresh() {
@@ -121,6 +126,8 @@ class SSHKeyTableView: UITableViewController {
                             strongSelf.data.addObject(localArr.objectAtIndex(index-1))
                         }
                     }
+                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
+                    NSUserDefaults().setObject(nsData, forKey: "keys")
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     strongSelf.tableView.reloadData()

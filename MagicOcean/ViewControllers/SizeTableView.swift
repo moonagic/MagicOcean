@@ -34,7 +34,12 @@ class SizeTableView: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.mj_header.beginRefreshing()
+        if let result:NSData = NSUserDefaults().objectForKey("sizes") as? NSData {
+            
+            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+        } else {
+            self.tableView.mj_header.beginRefreshing()
+        }
     }
     
     func setupMJRefresh() {
@@ -120,6 +125,8 @@ class SizeTableView: UITableViewController {
                     for index in 1...localArr.count {
                         strongSelf.data.addObject(localArr.objectAtIndex(index-1))
                     }
+                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
+                    NSUserDefaults().setObject(nsData, forKey: "sizes")
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     strongSelf.tableView.reloadData()
