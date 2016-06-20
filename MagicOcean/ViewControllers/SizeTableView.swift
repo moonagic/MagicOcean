@@ -23,6 +23,20 @@ class SizeTableView: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let identifier:String = "sizecell"
+        let cell:ImageCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! ImageCell
+        
+        //        let dic = self.data.objectAtIndex(indexPath.row)
+        //        cell.textLabel?.text = dic.valueForKey("slug") as? String
+        
+        return cell
+    }
+    
     @IBAction func cancellPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true) {
             
