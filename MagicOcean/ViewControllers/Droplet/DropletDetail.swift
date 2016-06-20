@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import Toast_Swift
 import MBProgressHUD
 
 class DropletDetail: UITableViewController {
