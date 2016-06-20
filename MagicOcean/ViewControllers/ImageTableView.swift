@@ -10,13 +10,15 @@ import UIKit
 import Alamofire
 import MJRefresh
 
-protocol selectDelegate {
-    func selectImage()
+@objc public protocol SelectImageDelegate {
+    func didSelectImage(slug: NSDictionary)
 }
 
 class ImageTableView: UITableViewController {
     
     var data:NSMutableArray = []
+    weak var delegate: SelectImageDelegate?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,8 +80,10 @@ class ImageTableView: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//        let cell:ImageCell = tableView.cellForRowAtIndexPath(indexPath) as! ImageCell
-        self.dismissViewControllerAnimated(true) { 
+        //        let cell:ImageCell = tableView.cellForRowAtIndexPath(indexPath) as! ImageCell
+        let dic = self.data.objectAtIndex(indexPath.row)
+        self.delegate?.didSelectImage(dic as! NSDictionary)
+        self.dismissViewControllerAnimated(true) {
             
         }
     }

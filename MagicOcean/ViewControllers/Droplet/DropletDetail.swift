@@ -54,7 +54,7 @@ class DropletDetail: UITableViewController {
                     self.imageLabel.text = droplet.valueForKey("image")?.valueForKey("slug") as? String
                     
                     let price:Float = droplet.valueForKey("size")?.valueForKey("price_monthly") as! Float
-                    self.priceLabel.text = String(format: "$ %.2f", price);
+                    self.priceLabel.text = String(format: "$%.2f", price);
                     
                     let memory:Int = droplet.valueForKey("size")?.valueForKey("memory") as! Int
                     let cpu:Int = droplet.valueForKey("size")?.valueForKey("vcpus") as! Int
@@ -65,6 +65,9 @@ class DropletDetail: UITableViewController {
                     
                     let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
                     self.regionLabel.text = region
+                    
+                    let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
+                    self.diskLabel.text = "\(disk)GB SSD"
                 })
             }
         }
@@ -173,10 +176,18 @@ class DropletDetail: UITableViewController {
         
         weak var weakSelf = self
         print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/")
-        Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
+                if response.result.isSuccess {
+                    
+                    let dic = response.result.value as! NSDictionary
+                    print("response=\(dic)")
+//                    strongSelf.dismissViewControllerAnimated(true, completion: { 
+//                        
+//                    })
+                } else {
+                    
+                }
             }
         }
     }

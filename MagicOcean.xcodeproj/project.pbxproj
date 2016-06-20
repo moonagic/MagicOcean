@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		9401C5621D179399001B5148 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9401C5611D179399001B5148 /* ImageCell.swift */; };
 		9401C5641D17945A001B5148 /* ImageTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9401C5631D17945A001B5148 /* ImageTableView.swift */; };
+		9419E1EE1D17AEC100FAE085 /* SizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419E1ED1D17AEC100FAE085 /* SizeCell.swift */; };
+		9419E1F01D17B6EF00FAE085 /* RegionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419E1EF1D17B6EF00FAE085 /* RegionCell.swift */; };
+		9419E1F21D17BAA500FAE085 /* SSHKeyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419E1F11D17BAA500FAE085 /* SSHKeyCell.swift */; };
 		9430C2501D167EAE0033F819 /* AddNewDroplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C24F1D167EAE0033F819 /* AddNewDroplet.swift */; };
 		9430C2541D16AA0E0033F819 /* SizeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2531D16AA0E0033F819 /* SizeTableView.swift */; };
 		9430C2561D16AA1D0033F819 /* RegionTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9430C2551D16AA1D0033F819 /* RegionTableView.swift */; };
@@ -35,6 +38,9 @@
 		7813C4F4B9350F5BD05753C3 /* Pods-MagicOcean.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicOcean.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagicOcean/Pods-MagicOcean.debug.xcconfig"; sourceTree = "<group>"; };
 		9401C5611D179399001B5148 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageCell.swift; path = View/ImageCell.swift; sourceTree = "<group>"; };
 		9401C5631D17945A001B5148 /* ImageTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageTableView.swift; path = ViewControllers/ImageTableView.swift; sourceTree = "<group>"; };
+		9419E1ED1D17AEC100FAE085 /* SizeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SizeCell.swift; path = View/SizeCell.swift; sourceTree = "<group>"; };
+		9419E1EF1D17B6EF00FAE085 /* RegionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegionCell.swift; path = View/RegionCell.swift; sourceTree = "<group>"; };
+		9419E1F11D17BAA500FAE085 /* SSHKeyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSHKeyCell.swift; path = View/SSHKeyCell.swift; sourceTree = "<group>"; };
 		9430C24F1D167EAE0033F819 /* AddNewDroplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddNewDroplet.swift; path = ViewControllers/Add/AddNewDroplet.swift; sourceTree = "<group>"; };
 		9430C2531D16AA0E0033F819 /* SizeTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SizeTableView.swift; path = ViewControllers/SizeTableView.swift; sourceTree = "<group>"; };
 		9430C2551D16AA1D0033F819 /* RegionTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegionTableView.swift; path = ViewControllers/RegionTableView.swift; sourceTree = "<group>"; };
@@ -150,6 +156,9 @@
 			children = (
 				94D3B49F1D0E6C42001E8807 /* DropletsCell.swift */,
 				9401C5611D179399001B5148 /* ImageCell.swift */,
+				9419E1ED1D17AEC100FAE085 /* SizeCell.swift */,
+				9419E1EF1D17B6EF00FAE085 /* RegionCell.swift */,
+				9419E1F11D17BAA500FAE085 /* SSHKeyCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -358,11 +367,13 @@
 				94D1E0FD1D0E4CB40043E41D /* Login.swift in Sources */,
 				94D3B4A01D0E6C42001E8807 /* DropletsCell.swift in Sources */,
 				94D3B4AD1D0E80F0001E8807 /* DropletDetail.swift in Sources */,
+				9419E1F01D17B6EF00FAE085 /* RegionCell.swift in Sources */,
 				94D3B4B51D0E8D29001E8807 /* Droplet.swift in Sources */,
 				9401C5621D179399001B5148 /* ImageCell.swift in Sources */,
 				9430C2541D16AA0E0033F819 /* SizeTableView.swift in Sources */,
 				9430C25A1D16B0460033F819 /* AddNewSSHKey.swift in Sources */,
 				9430C2581D16AA290033F819 /* SSHKeyTableView.swift in Sources */,
+				9419E1F21D17BAA500FAE085 /* SSHKeyCell.swift in Sources */,
 				9430C2561D16AA1D0033F819 /* RegionTableView.swift in Sources */,
 				9401C5641D17945A001B5148 /* ImageTableView.swift in Sources */,
 				943FE2AD1D07BDB900877358 /* AppDelegate.swift in Sources */,
@@ -370,6 +381,7 @@
 				94D3B4A31D0E7639001E8807 /* AccountController.swift in Sources */,
 				94D3B4AB1D0E80E9001E8807 /* DropletsViewController.swift in Sources */,
 				9430C2501D167EAE0033F819 /* AddNewDroplet.swift in Sources */,
+				9419E1EE1D17AEC100FAE085 /* SizeCell.swift in Sources */,
 				94D3B4B11D0E8191001E8807 /* Tools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

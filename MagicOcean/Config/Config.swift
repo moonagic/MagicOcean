@@ -21,5 +21,8 @@ let URL_OAUTHTOKEN = "oauth/token"
 let URL_DROPLETS = "droplets"
 let URL_ACTIONS = "actions"
 let URL_IMAGES = "images"
+let URL_SIZES = "sizes"
+let URL_REGIONS = "regions"
+let URL_KEYS = "keys"
 
 
