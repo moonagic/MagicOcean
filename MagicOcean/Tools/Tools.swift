@@ -11,13 +11,7 @@ import MBProgressHUD
 
 
 let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-/**
- 获取随机字符串
- 
- - parameter length: 字符串长度
- 
- - returns:
- */
+
 func getRandomStringOfLength(length: Int) -> String {
     var ranStr = ""
     for _ in 0..<length {
@@ -25,7 +19,6 @@ func getRandomStringOfLength(length: Int) -> String {
         ranStr.append(characters[characters.startIndex.advancedBy(index)])
     }
     return ranStr
-    
 }
 
 func makeTextToast(message: String, view: UIView) {

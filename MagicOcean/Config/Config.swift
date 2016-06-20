@@ -28,4 +28,3 @@ let URL_KEYS = "keys"
 
 
 
-let kAlphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"

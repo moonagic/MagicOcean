@@ -88,7 +88,9 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         let sizeSlug:String = sizeDic.valueForKey("slug") as! String
         let disksizeSlug:Int = sizeDic.valueForKey("disk") as! Int
         
-        cell.infoLabel.text = "\(imageSlug) - \(regionSlug) - \(sizeSlug) - \(disksizeSlug)G"
+        cell.infoLabel.text = "\(imageSlug) - \(sizeSlug) - \(disksizeSlug)G"
+        
+        cell.locationLabel.text = "\(regionSlug)"
         
         let networks:NSDictionary = dic.valueForKey("networks") as! NSDictionary
         let v4:NSArray = networks.valueForKey("v4") as! NSArray
@@ -133,7 +135,6 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func addPressed(sender: AnyObject) {
         // pressed the add button
-        
     }
 }
 

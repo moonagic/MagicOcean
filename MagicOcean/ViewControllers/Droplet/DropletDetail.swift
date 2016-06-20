@@ -28,6 +28,33 @@ class DropletDetail: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.title = Droplet.sharedInstance.Name
+        
+        if let result:NSData = NSUserDefaults().objectForKey("droplet\(Droplet.sharedInstance.ID)") as? NSData {
+            
+            self.droplet = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSDictionary
+            
+            self.title = droplet.valueForKey("name") as? String
+            
+            self.imageLabel.text = droplet.valueForKey("image")?.valueForKey("slug") as? String
+            
+            let price:Float = droplet.valueForKey("size")?.valueForKey("price_monthly") as! Float
+            self.priceLabel.text = String(format: "$%.2f", price);
+            
+            let memory:Int = droplet.valueForKey("size")?.valueForKey("memory") as! Int
+            let cpu:Int = droplet.valueForKey("size")?.valueForKey("vcpus") as! Int
+            self.memAndCPULabel.text = "\(memory)MB / \(cpu)CPUs"
+            
+            let transfer:Int = droplet.valueForKey("size")?.valueForKey("transfer") as! Int
+            self.transferLabel.text = "Transfer \(transfer)TB"
+            
+            let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
+            self.regionLabel.text = region
+            
+            let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
+            self.diskLabel.text = "\(disk)GB SSD"
+            
+        }
+        
         loadDropletDetail()
     }
     
@@ -67,6 +94,9 @@ class DropletDetail: UITableViewController {
                     
                     let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
                     self.diskLabel.text = "\(disk)GB SSD"
+                    
+                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(droplet)
+                    NSUserDefaults().setObject(nsData, forKey: "droplet\(Droplet.sharedInstance.ID)")
                 })
             }
         }
@@ -176,10 +206,6 @@ class DropletDetail: UITableViewController {
         weak var weakSelf = self
         print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/")
         Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            print(response.result)   // result of response serialization
             
             if let strongSelf = weakSelf {
                 if response.response?.statusCode == 204 {
