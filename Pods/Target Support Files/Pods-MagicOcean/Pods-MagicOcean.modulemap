@@ -1,6 +1,0 @@
-framework module Pods_MagicOcean {
-  umbrella header "Pods-MagicOcean-umbrella.h"
-
-  export *
-  module * { export * }
-}
