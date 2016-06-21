@@ -21,6 +21,7 @@
 		943FE2B21D07BDB900877358 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B01D07BDB900877358 /* Main.storyboard */; };
 		943FE2B41D07BDB900877358 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B31D07BDB900877358 /* Assets.xcassets */; };
 		943FE2B71D07BDB900877358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 943FE2B51D07BDB900877358 /* LaunchScreen.storyboard */; };
+		94B7E4E31D190D6E0039483B /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7E4E21D190D6E0039483B /* Global.swift */; };
 		94D1E0F61D0D5FF50043E41D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0F51D0D5FF50043E41D /* Account.swift */; };
 		94D1E0F91D0E4C980043E41D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0F81D0E4C980043E41D /* Config.swift */; };
 		94D1E0FD1D0E4CB40043E41D /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D1E0FC1D0E4CB40043E41D /* Login.swift */; };
@@ -52,6 +53,7 @@
 		943FE2B31D07BDB900877358 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		943FE2B61D07BDB900877358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		943FE2B81D07BDB900877358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94B7E4E21D190D6E0039483B /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Global.swift; path = Config/Global.swift; sourceTree = "<group>"; };
 		94D1E0F51D0D5FF50043E41D /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = Data/Account.swift; sourceTree = "<group>"; };
 		94D1E0F81D0E4C980043E41D /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Config/Config.swift; sourceTree = "<group>"; };
 		94D1E0FC1D0E4CB40043E41D /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Login.swift; path = ViewControllers/Login/Login.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		943FE2C41D07BEB400877358 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				94B7E4E21D190D6E0039483B /* Global.swift */,
 				94D1E0F81D0E4C980043E41D /* Config.swift */,
 			);
 			name = Config;
@@ -383,6 +386,7 @@
 				9430C2501D167EAE0033F819 /* AddNewDroplet.swift in Sources */,
 				9419E1EE1D17AEC100FAE085 /* SizeCell.swift in Sources */,
 				94D3B4B11D0E8191001E8807 /* Tools.swift in Sources */,
+				94B7E4E31D190D6E0039483B /* Global.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
