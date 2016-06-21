@@ -38,7 +38,6 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         setStatusBarAndNavigationBar(self.navigationController!)
         
         self.hostnameField.delegate = self
-        self.hostnameField.becomeFirstResponder()
         
         if let result:NSData = NSUserDefaults().objectForKey("sizes") as? NSData {
             let sizes:NSMutableArray = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
@@ -76,14 +75,6 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     }
     
     @IBAction func savePressed(sender: AnyObject) {
-        // 前置判断
-        
-        
-//        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" -d '{"name":"example.com","region":"nyc3","size":"512mb","image":"ubuntu-14-04-x64","ssh_keys":null,"backups":false,"ipv6":true,"user_data":null,"private_networking":null}' "https://api.digitalocean.com/v2/droplets"
-        let Headers = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+Account.sharedInstance.Access_Token
-        ]
         
         if self.hostnameField.text == "" {
             makeTextToast("Hostname can not be blank!", view: self.view.window!)
@@ -101,6 +92,13 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
             makeTextToast("You must select region!", view: self.view.window!)
             return
         }
+        
+        //        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" -d '{"name":"example.com","region":"nyc3","size":"512mb","image":"ubuntu-14-04-x64","ssh_keys":null,"backups":false,"ipv6":true,"user_data":null,"private_networking":null}' "https://api.digitalocean.com/v2/droplets"
+        
+        let Headers = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+Account.sharedInstance.Access_Token
+        ]
         
         let name:String = self.hostnameField.text!
         let size:String = self.sizeDic.valueForKey("slug") as! String

@@ -2,7 +2,7 @@ PODS:
   - Alamofire (3.4.1)
   - Kingfisher (2.4.1)
   - MBProgressHUD (0.9.2)
-  - MJRefresh (3.1.7)
+  - MJRefresh (3.1.8)
 
 DEPENDENCIES:
   - Alamofire
@@ -14,7 +14,7 @@ SPEC CHECKSUMS:
   Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJRefresh: f67f0750d57a4e4ae433da549359ca53b52cdc7d
+  MJRefresh: d226bbe0b1ec398f426ba1dc99319b4e51182e19
 
 PODFILE CHECKSUM: 1fef4fa7ecd8f6f3c4c716fdc135b8feac9135ee
 
