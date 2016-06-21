@@ -1,21 +1,24 @@
 PODS:
+  - 1PasswordExtension (1.8.2)
   - Alamofire (3.4.1)
   - Kingfisher (2.4.1)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.8)
 
 DEPENDENCIES:
+  - 1PasswordExtension
   - Alamofire
   - Kingfisher
   - MBProgressHUD
   - MJRefresh
 
 SPEC CHECKSUMS:
+  1PasswordExtension: 303f2b7bbf6dc19ede3090bd6b5987530648d687
   Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: d226bbe0b1ec398f426ba1dc99319b4e51182e19
 
-PODFILE CHECKSUM: 1fef4fa7ecd8f6f3c4c716fdc135b8feac9135ee
+PODFILE CHECKSUM: be40333cf39e968352e21733bdcfb170e519ab3b
 
 COCOAPODS: 1.0.1

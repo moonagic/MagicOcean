@@ -6,6 +6,7 @@ def pods
   pod 'Kingfisher'
   pod 'MJRefresh'
   pod 'MBProgressHUD'
+  pod '1PasswordExtension'
 end
 
 target 'MagicOcean' do
