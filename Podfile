@@ -7,6 +7,7 @@ def pods
   pod 'MJRefresh'
   pod 'MBProgressHUD'
   pod '1PasswordExtension'
+  pod 'DZNEmptyDataSet'
 end
 
 target 'MagicOcean' do
