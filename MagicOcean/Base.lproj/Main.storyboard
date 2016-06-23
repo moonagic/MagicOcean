@@ -313,7 +313,7 @@
                                 <action selector="cancellPressed:" destination="Zih-Uq-9Np" id="dRb-tD-Y9u"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="H9j-bG-dd8">
+                        <barButtonItem key="rightBarButtonItem" title="Add" id="H9j-bG-dd8">
                             <connections>
                                 <action selector="savePressed:" destination="Zih-Uq-9Np" id="fO2-Lh-WkY"/>
                             </connections>
@@ -714,7 +714,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Zi2-21-byz">
                             <connections>
                                 <action selector="addPressed:" destination="BYZ-38-t0r" id="mx0-cl-70l"/>
-                                <segue destination="NJy-7y-EBQ" kind="show" id="wrJ-OF-v7U"/>
+                                <segue destination="NJy-7y-EBQ" kind="show" identifier="adddroplet" id="wrJ-OF-v7U"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

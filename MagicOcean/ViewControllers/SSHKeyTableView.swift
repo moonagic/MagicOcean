@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import MJRefresh
+import MBProgressHUD
 
 @objc public protocol SelectSSHKeyDelegate {
     func didSelectSSHKey(key: NSDictionary)
@@ -107,9 +108,16 @@ class SSHKeyTableView: UITableViewController {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
+        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        self.view.window?.addSubview(hud)
+        hud.mode = MBProgressHUDMode.Indeterminate
+        hud.show(true)
+        hud.removeFromSuperViewOnHide = true
         weak var weakSelf = self
-        
         Alamofire.request(.GET, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+            dispatch_async(dispatch_get_main_queue(), { 
+                hud.hide(true)
+            })
             if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")

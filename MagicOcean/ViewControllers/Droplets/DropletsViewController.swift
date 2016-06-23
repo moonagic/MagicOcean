@@ -9,9 +9,10 @@
 import UIKit
 import Alamofire
 import MJRefresh
+import DZNEmptyDataSet
 
 
-class DropletsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DropletsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DropletDelegate, AddDropletDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var data:NSMutableArray = []
@@ -24,6 +25,8 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
         
         tableView.tableFooterView = UIView.init(frame: CGRectZero)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -108,6 +111,27 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         self.performSegueWithIdentifier("showdropletdetail", sender: nil)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showdropletdetail" {
+            let dropletDetail:DropletDetail = segue.destinationViewController as! DropletDetail
+            dropletDetail.delegate = self
+        } else if segue.identifier == "adddroplet" {
+            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let and:AddNewDroplet = nv.topViewController as! AddNewDroplet
+            and.delegate = self
+        }
+    }
+    
+    // MARK: DropletDelegate
+    func didSeleteDroplet() {
+        self.tableView.mj_header.beginRefreshing()
+    }
+    
+    // MARK: AddDropletDelegate
+    func didAddDroplet() {
+        self.tableView.mj_header.beginRefreshing()
+    }
+    
     func loadDroplets(page: Int, per_page: Int) {
         let Headers = [
             "Content-Type": "application/json",
@@ -132,6 +156,48 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
     }
+    
+    // MARK: DZNEmptyDataSetSource
+    func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.darkGrayColor()
+        ]
+        
+        let attrString:NSAttributedString = NSAttributedString(string: "You have no droplets.", attributes: attributes)
+        return attrString
+    }
+    
+    func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.grayColor()
+        ]
+        
+        let attrString:NSAttributedString = NSAttributedString(string: "You can create your first droplet.", attributes: attributes)
+        return attrString
+    }
+    
+    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
+        ]
+        
+        let attrString:NSAttributedString = NSAttributedString(string: "Create Droplet", attributes: attributes)
+        return attrString
+    }
+    
+    func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
+        return UIColor.whiteColor()
+    }
+    
+    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
+        self.performSegueWithIdentifier("adddroplet", sender: nil)
+    }
+    
+    // MARK: DZNEmptyDataSetDelegate
+    func emptyDataSetShouldAllowScroll(scrollView: UIScrollView!) -> Bool {
+        return true
+    }
+    
     
     @IBAction func addPressed(sender: AnyObject) {
         // pressed the add button

@@ -10,6 +10,10 @@ import UIKit
 import Alamofire
 import MBProgressHUD
 
+@objc public protocol DropletDelegate {
+    func didSeleteDroplet()
+}
+
 class DropletDetail: UITableViewController {
     
     var droplet:NSDictionary!
@@ -19,6 +23,7 @@ class DropletDetail: UITableViewController {
     @IBOutlet weak var diskLabel: UILabel!
     @IBOutlet weak var transferLabel: UILabel!
     @IBOutlet weak var regionLabel: UILabel!
+    weak var delegate: DropletDelegate?
     
     
     override func viewDidLoad() {
@@ -67,7 +72,6 @@ class DropletDetail: UITableViewController {
         ]
         
         weak var weakSelf = self
-        print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)")
         Alamofire.request(.GET, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)", parameters: nil, encoding: .URL, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
                 let dic = response.result.value as! NSDictionary
@@ -146,11 +150,19 @@ class DropletDetail: UITableViewController {
         let parameters = [
             "type": type
         ]
+        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        self.view.window?.addSubview(hud)
+        hud.mode = MBProgressHUDMode.Indeterminate
+        hud.show(true)
+        hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
         print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS)
         Alamofire.request(.POST, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
+                dispatch_async(dispatch_get_main_queue(), { 
+                    hud.hide(true)
+                })
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
             }
@@ -203,13 +215,21 @@ class DropletDetail: UITableViewController {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
+        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        self.view.window?.addSubview(hud)
+        hud.mode = MBProgressHUDMode.Indeterminate
+        hud.show(true)
+        hud.removeFromSuperViewOnHide = true
+        
         weak var weakSelf = self
-        print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/")
         Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
-            
+            dispatch_async(dispatch_get_main_queue(), { 
+                hud.hide(true)
+            })
             if let strongSelf = weakSelf {
                 if response.response?.statusCode == 204 {
                     dispatch_async(dispatch_get_main_queue(), {
+                        strongSelf.delegate?.didSeleteDroplet()
                         strongSelf.navigationController?.popViewControllerAnimated(true)
                     })
                 } else if response.response?.statusCode == 442 {
