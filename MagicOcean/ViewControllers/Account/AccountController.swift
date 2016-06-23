@@ -18,6 +18,7 @@ class AccountController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setStatusBarAndNavigationBar(self.navigationController!)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -31,7 +32,16 @@ class AccountController: UITableViewController {
     
     @IBAction func LogoutPressed(sender: AnyObject) {
         Account.sharedInstance.logoutUser()
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true) { 
+            
+        }
+    }
+    
+    @IBAction func donePressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true) { 
+            
+        }
     }
     
     func getAccountDetial() {

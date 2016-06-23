@@ -570,7 +570,13 @@
                             <outlet property="delegate" destination="JpT-Xi-PGc" id="oBP-sc-Q4g"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Account" id="JAl-rw-L41"/>
+                    <navigationItem key="navigationItem" title="Account" id="JAl-rw-L41">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="yDc-a8-aze">
+                            <connections>
+                                <action selector="donePressed:" destination="JpT-Xi-PGc" id="Htn-kQ-Si3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="dropletLimitLabel" destination="vqH-cG-SFb" id="4qJ-Zn-z93"/>
                         <outlet property="emailLabel" destination="OmS-j1-PRB" id="mYn-vR-UJu"/>
@@ -580,7 +586,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bg6-Jr-xMK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2036" y="-93"/>
+            <point key="canvasLocation" x="2848" y="-93"/>
         </scene>
         <!--Droplets-->
         <scene sceneID="tne-QT-ifu">
@@ -702,7 +708,7 @@
                     <navigationItem key="navigationItem" title="Droplets" id="Qwh-ru-BXH">
                         <barButtonItem key="leftBarButtonItem" title="Account" id="70t-Wd-Ujc">
                             <connections>
-                                <segue destination="JpT-Xi-PGc" kind="show" id="mm4-XC-yC2"/>
+                                <segue destination="2lD-pm-tZk" kind="show" id="mm4-XC-yC2"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Zi2-21-byz">
@@ -1112,7 +1118,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zCL-pZ-Yod" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5976" y="242"/>
+            <point key="canvasLocation" x="6788" y="242"/>
         </scene>
         <!--Select Image-->
         <scene sceneID="u1L-zy-LmA">
@@ -1163,7 +1169,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n3f-t7-szC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5976" y="-763"/>
+            <point key="canvasLocation" x="6788" y="-763"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dBn-Yo-vaY">
@@ -1181,7 +1187,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dNN-FW-uUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5164" y="242"/>
+            <point key="canvasLocation" x="5976" y="242"/>
         </scene>
         <!--Select Region-->
         <scene sceneID="YSV-V3-9p3">
@@ -1447,7 +1453,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JjK-3t-trJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5164" y="-763"/>
+            <point key="canvasLocation" x="5976" y="-763"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="PDK-zY-O9F">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2lD-pm-tZk" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="P0L-tu-RZR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="JpT-Xi-PGc" kind="relationship" relationship="rootViewController" id="at9-Sw-egP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bm4-ue-jqz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2036" y="-93"/>
         </scene>
     </scenes>
     <resources>
