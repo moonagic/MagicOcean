@@ -59,7 +59,6 @@
 		94D1E0FC1D0E4CB40043E41D /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Login.swift; path = ViewControllers/Login/Login.swift; sourceTree = "<group>"; };
 		94D3B49F1D0E6C42001E8807 /* DropletsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropletsCell.swift; path = View/DropletsCell.swift; sourceTree = "<group>"; };
 		94D3B4A21D0E7639001E8807 /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = ViewControllers/Account/AccountController.swift; sourceTree = "<group>"; };
-		94D3B4A41D0E7B6C001E8807 /* MagicOcean-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicOcean-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		94D3B4AA1D0E80E9001E8807 /* DropletsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropletsViewController.swift; path = ViewControllers/Droplets/DropletsViewController.swift; sourceTree = "<group>"; };
 		94D3B4AC1D0E80F0001E8807 /* DropletDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropletDetail.swift; path = ViewControllers/Droplet/DropletDetail.swift; sourceTree = "<group>"; };
 		94D3B4B01D0E8191001E8807 /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Tools.swift; path = Tools/Tools.swift; sourceTree = "<group>"; };
@@ -171,7 +170,6 @@
 				943FE2AC1D07BDB900877358 /* AppDelegate.swift */,
 				943FE2B31D07BDB900877358 /* Assets.xcassets */,
 				943FE2B81D07BDB900877358 /* Info.plist */,
-				94D3B4A41D0E7B6C001E8807 /* MagicOcean-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
