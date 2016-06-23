@@ -17,6 +17,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     var data:NSMutableArray = []
     var needReload:Bool = true
+    var page:Int = 1
     
     
     override func viewDidLoad() {
@@ -58,14 +59,16 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         
         header.lastUpdatedTimeLabel.hidden = true;
         self.tableView.mj_header = header;
-        
+        weak var weakSelf = self
         self.tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {
-            
+            if let strongSelf = weakSelf {
+                strongSelf.loadDroplets(strongSelf.page+1, per_page: 10)
+            }
         })
     }
     
     func mjRefreshData() {
-        self.loadDroplets(0, per_page:10)
+        self.loadDroplets(1, per_page:10)
     }
 
     override func didReceiveMemoryWarning() {
@@ -140,18 +143,20 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         
         weak var weakSelf = self
         Alamofire.request(.GET, BASE_URL+URL_DROPLETS+"?page=\(page)&per_page=\(per_page)", parameters: nil, encoding: .URL, headers: Headers).responseJSON { response in
-            if let _ = weakSelf {
+            if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
                 if page == 1 {
-                    self.data.removeAllObjects()
+                    strongSelf.data.removeAllObjects()
                 }
+                strongSelf.page = page;
                 if let droplets:NSArray = (dic.valueForKey("droplets") as? NSArray)! {
-                    self.data = droplets.mutableCopy() as! NSMutableArray
+                    strongSelf.data = droplets.mutableCopy() as! NSMutableArray
                 }
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.tableView.mj_header.endRefreshing()
-                    self.tableView.reloadData()
+                    strongSelf.tableView.mj_header.endRefreshing()
+                    strongSelf.tableView.mj_footer.endRefreshing()
+                    strongSelf.tableView.reloadData()
                 })
             }
         }
