@@ -355,13 +355,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T2F-no-IAk">
-                                <rect key="frame" x="244" y="285" width="112" height="30"/>
+                                <rect key="frame" x="218" y="276" width="164" height="47"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Wfy-Iz-tCU"/>
-                                    <constraint firstAttribute="width" constant="112" id="eZ9-VJ-Ekk"/>
+                                    <constraint firstAttribute="height" constant="47" id="m8I-mp-qFk"/>
+                                    <constraint firstAttribute="width" constant="164" id="n4z-if-nTf"/>
                                 </constraints>
                                 <state key="normal" title="Login Button">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.14117647058823529" green="0.47058823529411764" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="pressed:" destination="Bl0-gz-3BM" eventType="touchUpInside" id="4Ob-NP-VXr"/>
@@ -370,15 +371,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="T2F-no-IAk" firstAttribute="centerY" secondItem="uHx-hq-C8P" secondAttribute="centerY" id="0kN-gp-6wr"/>
                             <constraint firstItem="yB8-6O-n0C" firstAttribute="top" secondItem="NdO-vn-40l" secondAttribute="bottom" id="6Mt-da-rYK"/>
                             <constraint firstItem="NdO-vn-40l" firstAttribute="top" secondItem="uHx-hq-C8P" secondAttribute="top" id="B77-aG-HrC"/>
+                            <constraint firstItem="T2F-no-IAk" firstAttribute="centerY" secondItem="uHx-hq-C8P" secondAttribute="centerY" id="NYe-LV-is2"/>
+                            <constraint firstItem="T2F-no-IAk" firstAttribute="centerX" secondItem="uHx-hq-C8P" secondAttribute="centerX" id="Sw0-ec-cfZ"/>
                             <constraint firstAttribute="trailing" secondItem="NdO-vn-40l" secondAttribute="trailing" id="akZ-nQ-i50"/>
                             <constraint firstItem="NdO-vn-40l" firstAttribute="leading" secondItem="uHx-hq-C8P" secondAttribute="leading" id="dKc-4Y-Xmn"/>
-                            <constraint firstItem="T2F-no-IAk" firstAttribute="centerX" secondItem="uHx-hq-C8P" secondAttribute="centerX" id="n4l-Sn-VaD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Login" id="Dk3-2J-b7l"/>
+                    <connections>
+                        <outlet property="loginButton" destination="T2F-no-IAk" id="9HM-IA-zlU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qla-eh-hmX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1348,7 +1352,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gc6-Tr-2RL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5559" y="2374"/>
+            <point key="canvasLocation" x="5591" y="2374"/>
         </scene>
         <!--Add New SSH Key-->
         <scene sceneID="ZZP-Fb-1hE">
@@ -1435,7 +1439,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gZG-YL-83m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6302" y="2374"/>
+            <point key="canvasLocation" x="6374" y="2374"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="uTn-D0-mIZ">

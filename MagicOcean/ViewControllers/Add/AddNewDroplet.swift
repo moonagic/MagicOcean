@@ -38,7 +38,6 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     weak var delegate: AddDropletDelegate?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarAndNavigationBar(self.navigationController!)
@@ -75,7 +74,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) { 
+        self.dismissViewControllerAnimated(true) {
             
         }
     }

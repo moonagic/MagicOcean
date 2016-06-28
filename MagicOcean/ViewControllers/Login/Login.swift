@@ -15,11 +15,15 @@ let kSafariViewControllerCloseNotification = "kSafariViewControllerCloseNotifica
 class Login: UIViewController, SFSafariViewControllerDelegate {
     
     var safariViewController: SFSafariViewController?
+    @IBOutlet weak var loginButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController!.navigationBarHidden = true
         self.view.backgroundColor = UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
+        
+        loginButton.layer.masksToBounds = true
+        loginButton.layer.cornerRadius = 6
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Login.dismissLoginController(_:)), name: kSafariViewControllerCloseNotification, object: nil)
     }
