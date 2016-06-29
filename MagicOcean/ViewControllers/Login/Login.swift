@@ -53,6 +53,7 @@ class Login: UIViewController, SFSafariViewControllerDelegate {
         let escapedAddress:String = authPath.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         safariViewController = SFSafariViewController(URL: NSURL(string: escapedAddress)!)
         safariViewController!.delegate = self
+        
         self.presentViewController(safariViewController!, animated: true, completion: nil)
         
         // Open Safari

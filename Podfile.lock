@@ -4,7 +4,7 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - Kingfisher (2.4.1)
   - MBProgressHUD (0.9.2)
-  - MJRefresh (3.1.8)
+  - MJRefresh (3.1.9)
 
 DEPENDENCIES:
   - 1PasswordExtension
@@ -20,7 +20,7 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJRefresh: d226bbe0b1ec398f426ba1dc99319b4e51182e19
+  MJRefresh: c5f1f1653e5a1b932c90f78074f2bc86f3f9bd5e
 
 PODFILE CHECKSUM: 1e69851160dda800eb3211e34bda9c8c7580fd82
 
