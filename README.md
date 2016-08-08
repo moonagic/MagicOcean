@@ -8,7 +8,8 @@ DigitalOcean第三方客户端
 <img src='http://ww2.sinaimg.cn/large/0060lm7Tgw1f1hgrs1ebwj308102q0sp.jpg' width='144' height='49' />
 </a>
 
-# Create your Config file first.
+# Build
+## Create your Config file first.
 ```swift
 let ClientID = "YOUR_CLIENTID"
 let ClientSecret = "YOUR_CLIENTSECRET"
