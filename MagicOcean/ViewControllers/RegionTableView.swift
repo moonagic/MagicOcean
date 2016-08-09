@@ -100,7 +100,7 @@ class RegionTableView: UITableViewController {
             if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
-                if page == 0 {
+                if page == 1 {
                     strongSelf.data.removeAllObjects()
                 }
                 let arr:NSArray = dic.valueForKey("regions") as! NSArray
