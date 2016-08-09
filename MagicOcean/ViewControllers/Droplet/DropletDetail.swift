@@ -150,10 +150,11 @@ class DropletDetail: UITableViewController {
         let parameters = [
             "type": type
         ]
-        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
+        
         self.view.window?.addSubview(hud)
         hud.mode = MBProgressHUDMode.Indeterminate
-        hud.show(true)
+        hud.showAnimated(true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
@@ -161,7 +162,7 @@ class DropletDetail: UITableViewController {
         Alamofire.request(.POST, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
                 dispatch_async(dispatch_get_main_queue(), { 
-                    hud.hide(true)
+                    hud.hideAnimated(true)
                 })
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
@@ -215,16 +216,16 @@ class DropletDetail: UITableViewController {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
-        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        let hud:MBProgressHUD = MBProgressHUD(view: self.view.window!)
         self.view.window?.addSubview(hud)
         hud.mode = MBProgressHUDMode.Indeterminate
-        hud.show(true)
+        hud.showAnimated(true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
         Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
             dispatch_async(dispatch_get_main_queue(), { 
-                hud.hide(true)
+                hud.hideAnimated(true)
             })
             if let strongSelf = weakSelf {
                 if response.response?.statusCode == 204 {

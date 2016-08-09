@@ -46,16 +46,18 @@ class AddNewSSHKey: UITableViewController, UITextFieldDelegate {
             "public_key":self.SSHKeyText.text
         ]
         
-        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        
+        
+        let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
         self.view.window?.addSubview(hud)
         hud.mode = MBProgressHUDMode.Indeterminate
-        hud.show(true)
+        hud.showAnimated(true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
         Alamofire.request(.POST, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
             dispatch_async(dispatch_get_main_queue(), { 
-                hud.hide(true)
+                hud.hideAnimated(true)
             })
             if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary

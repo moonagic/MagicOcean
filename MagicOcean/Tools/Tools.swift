@@ -24,10 +24,10 @@ func getRandomStringOfLength(length: Int) -> String {
 func makeTextToast(message: String, view: UIView) {
     let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
     hud.mode = MBProgressHUDMode.Text
-    hud.labelText = message
+    hud.label.text = message
     hud.margin = 10
     hud.removeFromSuperViewOnHide = true
-    hud.hide(true, afterDelay: 1)
+    hud.hideAnimated(true, afterDelay: 1)
 }
 
 func setStatusBarAndNavigationBar(navigation: UINavigationController) {

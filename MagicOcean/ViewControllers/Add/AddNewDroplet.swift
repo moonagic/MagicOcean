@@ -129,10 +129,10 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
             "private_networking":self.privateNetworkingSwitch.on
         ]
         
-        let hud:MBProgressHUD = MBProgressHUD(window: self.view.window)
+        let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
         self.view.window?.addSubview(hud)
         hud.mode = MBProgressHUDMode.Indeterminate
-        hud.show(true)
+        hud.showAnimated(true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
@@ -142,7 +142,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
                 dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
+                    hud.hideAnimated(true)
                     if let message = dic.valueForKey("message") {
                         print(message)
                         makeTextToast(message as! String, view: strongSelf.view.window!)
