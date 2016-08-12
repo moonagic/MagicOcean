@@ -1,5 +1,5 @@
 PODS:
-  - 1PasswordExtension (1.8.2)
+  - 1PasswordExtension (1.8.3)
   - Alamofire (3.4.1)
   - DZNEmptyDataSet (1.8.1)
   - Kingfisher (2.4.2)
@@ -15,13 +15,13 @@ DEPENDENCIES:
   - MJRefresh
 
 SPEC CHECKSUMS:
-  1PasswordExtension: 303f2b7bbf6dc19ede3090bd6b5987530648d687
+  1PasswordExtension: 8757dc3302353731dd3e678e63b5023a708783cb
   Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Kingfisher: 05bf8d04408aaa70fcd2c8c81b9f1d0f1ad313dd
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
 
-PODFILE CHECKSUM: 1e69851160dda800eb3211e34bda9c8c7580fd82
+PODFILE CHECKSUM: 308f4eddfd7ea9a31a1f520ba13110f542a47b79
 
 COCOAPODS: 1.0.1
