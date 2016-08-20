@@ -6,9 +6,9 @@ target 'MagicOcean' do
   use_frameworks!
 
   # Pods for MagicOcean
+  pod 'MJRefresh'
   pod 'Alamofire'
   pod 'Kingfisher'
-  pod 'MJRefresh'
   pod 'MBProgressHUD'
   pod '1PasswordExtension'
   pod 'DZNEmptyDataSet'
