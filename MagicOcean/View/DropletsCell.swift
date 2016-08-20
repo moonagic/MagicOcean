@@ -18,5 +18,8 @@ class DropletsCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.subView.layer.masksToBounds = true
+        self.subView.layer.cornerRadius = 6
+        self.subView.backgroundColor = UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
     }
 }
