@@ -32,6 +32,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.tableFooterView = UIView.init(frame: CGRectZero)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         
+        
         setupMJRefresh()
     }
     
@@ -59,16 +60,16 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         
         header.lastUpdatedTimeLabel.hidden = true;
         self.tableView.mj_header = header;
-        weak var weakSelf = self
-        self.tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {
-            if let strongSelf = weakSelf {
-                strongSelf.loadDroplets(strongSelf.page+1, per_page: 10)
-            }
-        })
+//        weak var weakSelf = self
+//        self.tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {
+//            if let strongSelf = weakSelf {
+//                strongSelf.loadDroplets(strongSelf.page+1, per_page: 10)
+//            }
+//        })
     }
     
     func mjRefreshData() {
-        self.loadDroplets(1, per_page:10)
+        self.loadDroplets(1, per_page:100)
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,6 +84,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let identifier:String = "dropletscell"
         let cell:DropletsCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! DropletsCell
+        
         let dic:NSDictionary = data.objectAtIndex(indexPath.row) as! NSDictionary
         cell.titleLabel.text = dic.valueForKey("name") as? String
         let imageDic:NSDictionary = dic.valueForKey("image") as! NSDictionary
@@ -155,7 +157,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     strongSelf.tableView.mj_header.endRefreshing()
-                    strongSelf.tableView.mj_footer.endRefreshing()
+//                    strongSelf.tableView.mj_footer.endRefreshing()
                     strongSelf.tableView.reloadData()
                 })
             }
