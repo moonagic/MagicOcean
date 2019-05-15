@@ -10,46 +10,54 @@ import UIKit
 import Alamofire
 import MJRefresh
 import MBProgressHUD
+import SwiftyJSON
 
-@objc public protocol SelectSSHKeyDelegate {
-    func didSelectSSHKey(key: NSDictionary)
+struct SSHKeyTeplete {
+    var name:String
+    var id:Int
+    var fingerprint:String
+    var public_key:String
+}
+protocol SelectSSHKeyDelegate {
+    func didSelectSSHKey(key: SSHKeyTeplete)
 }
 
 class SSHKeyTableView: UITableViewController {
     
-    var data:NSMutableArray = []
-    weak var delegate: SelectSSHKeyDelegate?
+    var SSHKeydata:[SSHKeyTeplete] = Array<SSHKeyTeplete>()
+    var delegate: SelectSSHKeyDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
         
         setupMJRefresh()
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let result:NSData = NSUserDefaults().objectForKey("keys") as? NSData {
-            
-            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
-        } else {
+//        if let result:NSData = UserDefaults().object(forKey: "keys") as? NSData {
+        
+//            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
+//        } else {
             self.tableView.mj_header.beginRefreshing()
-        }
+//        }
     }
     
     func setupMJRefresh() {
         let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header.automaticallyChangeAlpha = true;
+        header?.isAutomaticallyChangeAlpha = true;
         
-        header.lastUpdatedTimeLabel.hidden = true;
+        header?.lastUpdatedTimeLabel.isHidden = true;
         self.tableView.mj_header = header;
         
     }
     
-    func mjRefreshData() {
+    @objc func mjRefreshData() {
+        SSHKeydata.removeAll()
         self.loadSSHKeys()
     }
     
@@ -57,46 +65,49 @@ class SSHKeyTableView: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return SSHKeydata.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "sshkeycell"
-        let cell:SSHKeyCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! SSHKeyCell
+        let cell:SSHKeyCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! SSHKeyCell
         
-        let dic = self.data.objectAtIndex(indexPath.row)
+//        let dic = self.data.objectAtIndex(indexPath.row)
+//
+//        let name:String = dic.valueForKey("name") as! String
+//
+//        cell.titleLabel.text = "\(name)"
         
-        let name:String = dic.valueForKey("name") as! String
-        
-        cell.titleLabel.text = "\(name)"
+        let key = SSHKeydata[indexPath.row]
+        cell.titleLabel.text = key.name
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let key = self.data.objectAtIndex(indexPath.row)
-        self.delegate?.didSelectSSHKey(key as! NSDictionary)
-        self.dismissViewControllerAnimated(true) { 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let key = SSHKeydata[indexPath.row]
+        self.delegate?.didSelectSSHKey(key: key)
+        self.dismiss(animated: true) {
             
         }
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            // delete key
-            let dic = self.data.objectAtIndex(indexPath.row)
-            self.deleteKey(dic.valueForKey("id") as! Int)
-        }
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                // delete key
+                let key = SSHKeydata[indexPath.row]
+                deleteKey(key: key.id)
+            }
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -108,35 +119,34 @@ class SSHKeyTableView: UITableViewController {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
-        let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
-        self.view.window?.addSubview(hud)
-        hud.mode = MBProgressHUDMode.Indeterminate
-        hud.showAnimated(true)
-        hud.removeFromSuperViewOnHide = true
+//        let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
+//        self.view.window?.addSubview(hud)
+//        hud.mode = MBProgressHUDMode.indeterminate
+//        hud.show(animated: true)
+//        hud.removeFromSuperViewOnHide = true
         weak var weakSelf = self
-        Alamofire.request(.GET, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
-            dispatch_async(dispatch_get_main_queue(), { 
-                hud.hideAnimated(true)
-            })
+        Alamofire.request(BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+            
             if let strongSelf = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
                 
-                let arr:NSArray = dic.valueForKey("ssh_keys") as! NSArray
-                strongSelf.data.removeAllObjects()
-                if let localArr:NSArray = arr {
-                    if localArr.count > 0 {
-                        for index in 1...localArr.count {
-                            strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print(jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            if let keys = json["ssh_keys"].array {
+                                for k in keys {
+                                    self.SSHKeydata.append(SSHKeyTeplete(name: k["name"].string!, id: k["id"].int!, fingerprint: k["fingerprint"].string!, public_key: k["public_key"].string!))
+                                }
+                            }
                         }
                     }
-                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
-                    NSUserDefaults().setObject(nsData, forKey: "keys")
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
-                })
+                }
             }
         }
     }
@@ -150,9 +160,10 @@ class SSHKeyTableView: UITableViewController {
         
         weak var weakSelf = self
         
-        Alamofire.request(.DELETE, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS+"/\(key)", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_ACCOUNT+"/"+URL_KEYS+"/\(key)", method: .delete, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
                 if response.result.isSuccess {
+                    strongSelf.SSHKeydata.removeAll()
                     strongSelf.loadSSHKeys()
                 }
             }

@@ -9,30 +9,38 @@
 import UIKit
 import Alamofire
 import MJRefresh
+import SwiftyJSON
 
-@objc public protocol SelectRegionDelegate {
-    func didSelectRegion(region: NSDictionary)
+struct RegionTeplete {
+    var name:String
+    var slug:String
+}
+
+
+protocol SelectRegionDelegate {
+    func didSelectRegion(region: RegionTeplete)
 }
 
 class RegionTableView: UITableViewController {
     
     var data:NSMutableArray = []
-    weak var delegate: SelectRegionDelegate?
+    var regionData:[RegionTeplete] = Array<RegionTeplete>()
+    var delegate: SelectRegionDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
         
         setupMJRefresh()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let result:NSData = NSUserDefaults().objectForKey("regions") as? NSData {
+        if let result:NSData = UserDefaults().object(forKey: "regions") as? NSData {
             
-            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
         } else {
             self.tableView.mj_header.beginRefreshing()
         }
@@ -40,49 +48,50 @@ class RegionTableView: UITableViewController {
     
     func setupMJRefresh() {
         let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header.automaticallyChangeAlpha = true;
+        header?.isAutomaticallyChangeAlpha = true;
         
-        header.lastUpdatedTimeLabel.hidden = true;
+        header?.lastUpdatedTimeLabel.isHidden = true;
         self.tableView.mj_header = header;
         
     }
     
-    func mjRefreshData() {
-        self.loadRegions(1, per_page: 10)
+    @objc func mjRefreshData() {
+        self.loadRegions(page: 1, per_page: 10)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.regionData.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "regioncell"
-        let cell:RegionCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! RegionCell
+        let cell:RegionCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! RegionCell
         
-        let dic = self.data.objectAtIndex(indexPath.row)
-        
-        let name:String = dic.valueForKey("name") as! String
-        
-        cell.titleLabel.text = "\(name)"
+        let region = regionData[indexPath.row]
+//
+//        let name:String = (dic as AnyObject).valueForKey("name") as! String
+//
+//        cell.titleLabel.text = "\(name)"
+        cell.titleLabel.text = region.name
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let dic = self.data.objectAtIndex(indexPath.row)
-        self.delegate?.didSelectRegion(dic as! NSDictionary)
-        self.dismissViewControllerAnimated(true) { 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let region = regionData[indexPath.row]
+        self.delegate?.didSelectRegion(region: region)
+        self.dismiss(animated: true) {
             
         }
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -96,26 +105,47 @@ class RegionTableView: UITableViewController {
         
         weak var weakSelf = self
         
-        Alamofire.request(.GET, BASE_URL+URL_REGIONS+"?page=\(page)&per_page=\(per_page)", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_REGIONS+"?page=\(page)&per_page=\(per_page)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+//            if let strongSelf = weakSelf {
+//                let dic = response.result.value as! NSDictionary
+//                print("response=\(dic)")
+//                if page == 1 {
+//                    strongSelf.data.removeAllObjects()
+//                }
+//                let arr:NSArray = dic.valueForKey("regions") as! NSArray
+//                if let localArr:NSArray = arr {
+//
+//                    for index in 1...localArr.count {
+//                        strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+//                    }
+//                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
+//                    NSUserDefaults().setObject(nsData, forKey: "regions")
+//                }
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    strongSelf.tableView.reloadData()
+//                    strongSelf.tableView.mj_header.endRefreshing()
+//                })
+//            }
             if let strongSelf = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
-                if page == 1 {
-                    strongSelf.data.removeAllObjects()
-                }
-                let arr:NSArray = dic.valueForKey("regions") as! NSArray
-                if let localArr:NSArray = arr {
-                    
-                    for index in 1...localArr.count {
-                        strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print(jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            if let region = json["regions"].array {
+                                for r in region {
+                                    self.regionData.append(RegionTeplete(name: r["name"].string!, slug: r["slug"].string!))
+                                }
+                            }
+                        }
                     }
-                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
-                    NSUserDefaults().setObject(nsData, forKey: "regions")
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
-                })
+                }
             }
         }
     }

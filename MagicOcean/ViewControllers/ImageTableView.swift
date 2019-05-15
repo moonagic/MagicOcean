@@ -9,87 +9,93 @@
 import UIKit
 import Alamofire
 import MJRefresh
+import SwiftyJSON
 
-@objc public protocol SelectImageDelegate {
-    func didSelectImage(slug: NSDictionary)
+
+
+struct ImageTeplete {
+    var name:String
+    var slug:String
+    var distribution:String
+}
+
+
+protocol SelectImageDelegate {
+    func didSelectImage(image: ImageTeplete)
 }
 
 class ImageTableView: UITableViewController {
     
     var data:NSMutableArray = []
-    weak var delegate: SelectImageDelegate?
+    var imagesData:[ImageTeplete] = Array<ImageTeplete>()
+    var delegate: SelectImageDelegate?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
         
         setupMJRefresh()
     }
     
     func setupMJRefresh() {
         let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header.automaticallyChangeAlpha = true;
+        header?.isAutomaticallyChangeAlpha = true;
         
-        header.lastUpdatedTimeLabel.hidden = true;
+        header?.lastUpdatedTimeLabel.isHidden = true;
         self.tableView.mj_header = header;
         
     }
     
-    func mjRefreshData() {
-        self.loadImages(1, per_page: 100);
+    @objc func mjRefreshData() {
+        self.loadImages(page: 1, per_page: 100);
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let result:NSData = NSUserDefaults().objectForKey("images") as? NSData {
+        if let result:NSData = UserDefaults().object(forKey: "images") as? NSData {
             
-            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
         } else {
             self.tableView.mj_header.beginRefreshing()
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.imagesData.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "imagecell"
-        let cell:ImageCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! ImageCell
+        let cell:ImageCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ImageCell
         
-        let dic = self.data.objectAtIndex(indexPath.row)
-        
-        let distribution:String = dic.valueForKey("distribution") as! String
-        let name:String = dic.valueForKey("name") as! String
-        
-        cell.titleLabel.text = "\(distribution) \(name)"
+        let data = self.imagesData[indexPath.row]
+        cell.titleLabel.text = "\(data.distribution) \(data.name)"
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        //        let cell:ImageCell = tableView.cellForRowAtIndexPath(indexPath) as! ImageCell
-        let dic = self.data.objectAtIndex(indexPath.row)
-        self.delegate?.didSelectImage(dic as! NSDictionary)
-        self.dismissViewControllerAnimated(true) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let image = self.imagesData[indexPath.row]
+        self.delegate?.didSelectImage(image: image)
+        self.dismiss(animated: true) {
             
         }
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -103,29 +109,27 @@ class ImageTableView: UITableViewController {
         
         weak var weakSelf = self
         
-        Alamofire.request(.GET, BASE_URL+URL_IMAGES+"?page=\(page)&per_page=\(per_page)", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_IMAGES+"?page=\(page)&per_page=\(per_page)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
-                if page == 1 {
-                    strongSelf.data.removeAllObjects()
-                }
-                let arr:NSArray = dic.valueForKey("images") as! NSArray
-                if let localArr:NSArray = arr {
-                    
-                    for index in 1...localArr.count {
-                        let slug = localArr.objectAtIndex(index-1).valueForKey("slug") as? String
-                        if let _ = slug { // 过滤了一些slug为null的数据
-                            strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print(jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            if let images = json["images"].array {
+                                for i in images {
+                                    strongSelf.imagesData.append(ImageTeplete(name: i["name"].string ?? "-", slug: i["slug"].string ?? "-", distribution: i["distribution"].string ?? "-"))
+                                }
+                            }
                         }
                     }
-                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
-                    NSUserDefaults().setObject(nsData, forKey: "images")
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
-                })
+                }
             }
         }
     }

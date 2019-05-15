@@ -19,3 +19,4 @@ let URL_IMAGES = "images"
 let URL_SIZES = "sizes"
 let URL_REGIONS = "regions"
 let URL_KEYS = "keys"
+

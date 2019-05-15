@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import MBProgressHUD
+import SwiftyJSON
+import UITextView_Placeholder
 
 class AddNewSSHKey: UITableViewController, UITextFieldDelegate {
     
@@ -17,10 +19,11 @@ class AddNewSSHKey: UITableViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
         self.nameLabel.delegate = self
         self.nameLabel.becomeFirstResponder()
+        self.SSHKeyText.placeholder = "INPUT PUBLIC KEY"
     }
     
     override func didReceiveMemoryWarning() {
@@ -28,7 +31,7 @@ class AddNewSSHKey: UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -41,41 +44,50 @@ class AddNewSSHKey: UITableViewController, UITextFieldDelegate {
             "Authorization": "Bearer "+Account.sharedInstance.Access_Token
         ]
         
-        let parameters = [
-            "name":self.nameLabel.text,
-            "public_key":self.SSHKeyText.text
+        let parameters:Parameters = [
+            "name": self.nameLabel.text!,
+            "public_key": self.SSHKeyText.text!
         ]
         
         
         
         let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
         self.view.window?.addSubview(hud)
-        hud.mode = MBProgressHUDMode.Indeterminate
-        hud.showAnimated(true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.show(animated: true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
-        Alamofire.request(.POST, BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
-            dispatch_async(dispatch_get_main_queue(), { 
-                hud.hideAnimated(true)
-            })
+        Alamofire.request(BASE_URL+URL_ACCOUNT+"/"+URL_KEYS, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
+            DispatchQueue.main.async {
+                hud.hide(animated: true)
+            }
+            
             if let strongSelf = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
-                
-                if let message = dic.valueForKey("message") {
-                    makeTextToast(message as! String, view: strongSelf.view)
-                } else {
-                    strongSelf.dismissViewControllerAnimated(true, completion: {
-                        
-                    })
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print("jsonString", jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            if let message = json["message"].string {
+                                makeTextToast(message: message, view: self.view)
+                            } else {
+                                DispatchQueue.main.async {
+                                    strongSelf.dismiss(animated: true, completion: {
+                                        
+                                    })
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
         
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.isEqual(self.nameLabel) {
             textField.resignFirstResponder()
             self.SSHKeyText.becomeFirstResponder()

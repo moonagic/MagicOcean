@@ -13,6 +13,8 @@ import DZNEmptyDataSet
 
 
 class DropletsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DropletDelegate, AddDropletDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+   
+    
     
     @IBOutlet weak var tableView: UITableView!
     var data:NSMutableArray = []
@@ -22,26 +24,26 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.emptyDataSetSource = self
         tableView.emptyDataSetDelegate = self
         
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         
         
         setupMJRefresh()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         Account.sharedInstance.loadUser()
         if Account.sharedInstance.Access_Token != "" {
@@ -50,15 +52,15 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
                 needReload = false
             }
         } else {
-            self.performSegueWithIdentifier("gotologin", sender: nil)
+            self.performSegue(withIdentifier: "gotologin", sender: nil)
         }
     }
     
     func setupMJRefresh() {
         let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header.automaticallyChangeAlpha = true;
+        header?.isAutomaticallyChangeAlpha = true;
         
-        header.lastUpdatedTimeLabel.hidden = true;
+        header?.lastUpdatedTimeLabel.isHidden = true;
         self.tableView.mj_header = header;
 //        weak var weakSelf = self
 //        self.tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {
@@ -68,8 +70,8 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
 //        })
     }
     
-    func mjRefreshData() {
-        self.loadDroplets(1, per_page:100)
+    @objc func mjRefreshData() {
+        self.loadDroplets(page: 1, per_page:100)
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,51 +79,55 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "dropletscell"
-        let cell:DropletsCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! DropletsCell
+        let cell:DropletsCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! DropletsCell
         
-        let dic:NSDictionary = data.objectAtIndex(indexPath.row) as! NSDictionary
-        cell.titleLabel.text = dic.valueForKey("name") as? String
-        let imageDic:NSDictionary = dic.valueForKey("image") as! NSDictionary
-        let regionDic:NSDictionary = dic.valueForKey("region") as! NSDictionary
-        let sizeDic:NSDictionary = dic.valueForKey("size") as! NSDictionary
+        let dic:NSDictionary = data.object(at: indexPath.row) as! NSDictionary
+        cell.titleLabel.text = dic.value(forKey: "name") as? String
+        let imageDic:NSDictionary = dic.value(forKey: "image") as! NSDictionary
+        let regionDic:NSDictionary = dic.value(forKey: "region") as! NSDictionary
+        let sizeDic:NSDictionary = dic.value(forKey: "size") as! NSDictionary
         
-        let imageSlug:String = imageDic.valueForKey("slug") as! String
-        let regionSlug:String = regionDic.valueForKey("slug") as! String
-        let sizeSlug:String = sizeDic.valueForKey("slug") as! String
-        let disksizeSlug:Int = sizeDic.valueForKey("disk") as! Int
+        let imageSlug:String = imageDic.value(forKey: "slug") as! String
+        let regionSlug:String = regionDic.value(forKey: "slug") as! String
+        let sizeSlug:String = sizeDic.value(forKey: "slug") as! String
+        let disksizeSlug:Int = sizeDic.value(forKey: "disk") as! Int
         
         cell.infoLabel.text = "\(imageSlug) - \(sizeSlug) - \(disksizeSlug)G"
         
         cell.locationLabel.text = "\(regionSlug)"
         
-        let networks:NSDictionary = dic.valueForKey("networks") as! NSDictionary
-        let v4:NSArray = networks.valueForKey("v4") as! NSArray
-        let publicIP:String = v4[0].valueForKey("ip_address") as! String
+        let networks:NSDictionary = dic.value(forKey: "networks") as! NSDictionary
+        let v4:NSArray = networks.value(forKey: "v4") as! NSArray
+        if v4.count > 0 {
+            let v41:NSDictionary = v4[0] as! NSDictionary
+            let publicIP:String = v41.value(forKey: "ip_address") as! String
+            
+            cell.IPLabel.text = "Public IP: \(publicIP)"
+        }
         
-        cell.IPLabel.text = "Public IP: \(publicIP)"
         
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let dic:NSDictionary = data.objectAtIndex(indexPath.row) as! NSDictionary
-        Droplet.sharedInstance.ID = dic.valueForKey("id") as! Int
-        Droplet.sharedInstance.Name = dic.valueForKey("name") as! String
-        self.performSegueWithIdentifier("showdropletdetail", sender: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dic:NSDictionary = data.object(at: indexPath.row) as! NSDictionary
+        Droplet.sharedInstance.ID = dic.value(forKey: "id") as! Int
+        Droplet.sharedInstance.Name = dic.value(forKey: "name") as! String
+        self.performSegue(withIdentifier: "showdropletdetail", sender: nil)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showdropletdetail" {
-            let dropletDetail:DropletDetail = segue.destinationViewController as! DropletDetail
+            let dropletDetail:DropletDetail = segue.destination as! DropletDetail
             dropletDetail.delegate = self
         } else if segue.identifier == "adddroplet" {
-            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let nv:UINavigationController = segue.destination as! UINavigationController
             let and:AddNewDroplet = nv.topViewController as! AddNewDroplet
             and.delegate = self
         }
@@ -144,7 +150,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         ]
         
         weak var weakSelf = self
-        Alamofire.request(.GET, BASE_URL+URL_DROPLETS+"?page=\(page)&per_page=\(per_page)", parameters: nil, encoding: .URL, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_DROPLETS+"?page=\(page)&per_page=\(per_page)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
@@ -152,56 +158,55 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
                     strongSelf.data.removeAllObjects()
                 }
                 strongSelf.page = page;
-                if let droplets:NSArray = (dic.valueForKey("droplets") as? NSArray)! {
+                if let droplets:NSArray = dic.value(forKey: "droplets") as? NSArray {
                     strongSelf.data = droplets.mutableCopy() as! NSMutableArray
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     strongSelf.tableView.mj_header.endRefreshing()
-//                    strongSelf.tableView.mj_footer.endRefreshing()
                     strongSelf.tableView.reloadData()
-                })
+                }
             }
         }
     }
     
     // MARK: DZNEmptyDataSetSource
-    func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkGrayColor()
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray
         ]
         
         let attrString:NSAttributedString = NSAttributedString(string: "You have no droplets.", attributes: attributes)
         return attrString
     }
     
-    func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+    func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attributes = [
-            NSForegroundColorAttributeName: UIColor.grayColor()
+            NSAttributedString.Key.foregroundColor: UIColor.gray
         ]
         
         let attrString:NSAttributedString = NSAttributedString(string: "You can create your first droplet.", attributes: attributes)
         return attrString
     }
     
-    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
         let attributes = [
-            NSForegroundColorAttributeName: UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
+            NSAttributedString.Key.foregroundColor: UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
         ]
         
         let attrString:NSAttributedString = NSAttributedString(string: "Create Droplet", attributes: attributes)
         return attrString
     }
     
-    func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
-        return UIColor.whiteColor()
+    func backgroundColor(forEmptyDataSet scrollView: UIScrollView!) -> UIColor! {
+        return UIColor.white
     }
     
-    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-        self.performSegueWithIdentifier("adddroplet", sender: nil)
+    func emptyDataSetDidTapButton(_ scrollView: UIScrollView!) {
+        self.performSegue(withIdentifier: "adddroplet", sender: nil)
     }
     
     // MARK: DZNEmptyDataSetDelegate
-    func emptyDataSetShouldAllowScroll(scrollView: UIScrollView!) -> Bool {
+    func emptyDataSetShouldAllowScroll(_ scrollView: UIScrollView!) -> Bool {
         return true
     }
     

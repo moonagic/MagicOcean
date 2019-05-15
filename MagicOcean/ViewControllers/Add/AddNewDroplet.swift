@@ -31,50 +31,51 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     @IBOutlet weak var privateNetworkingSwitch: UISwitch!
     @IBOutlet weak var backupsSwitch: UISwitch!
     @IBOutlet weak var ipv6Switch: UISwitch!
-    var sizeDic:NSDictionary!
-    var imageDic:NSDictionary!
-    var regionDic:NSDictionary!
-    var sshkeyDic:NSDictionary!
+    var sizeDic:SizeTeplete!
+    var imageDic:ImageTeplete!
+    var regionDic:RegionTeplete!
+    var sshkeyDic:SSHKeyTeplete!
+    
     
     weak var delegate: AddDropletDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
         self.hostnameField.delegate = self
         
-        if let result:NSData = NSUserDefaults().objectForKey("sizes") as? NSData {
-            let sizes:NSMutableArray = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
-            self.sizeDic = sizes[0] as! NSDictionary
-            let memory:Int = self.sizeDic.valueForKey("memory") as! Int
-            let price:Float = self.sizeDic.valueForKey("price_monthly") as! Float
-            let disk:Int = self.sizeDic.valueForKey("disk") as! Int
-            let transfer:Int = self.sizeDic.valueForKey("transfer") as! Int
-            let vcpus:Int = self.sizeDic.valueForKey("vcpus") as! Int
-            
-            self.priceLabel.text = "$\(String(format: "%.2f", price))"
-            self.memoryAndCPULabel.text = "\(memory)MB / \(vcpus)CPUs"
-            self.diskLabel.text = "\(disk)GB SSD"
-            self.transferLabel.text = "Transfer \(transfer)TB"
-        } else {
+//        if let result:NSData = UserDefaults().object(forKey: "sizes") as? NSData {
+//            let sizes:NSMutableArray = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
+//            self.sizeDic = (sizes[0] as! NSDictionary)
+//            let memory:Int = self.sizeDic.value(forKey: "memory") as! Int
+//            let price:Float = self.sizeDic.value(forKey: "price_monthly") as! Float
+//            let disk:Int = self.sizeDic.value(forKey: "disk") as! Int
+//            let transfer:Int = self.sizeDic.value(forKey: "transfer") as! Int
+//            let vcpus:Int = self.sizeDic.value(forKey: "vcpus") as! Int
+//            
+//            self.priceLabel.text = "$\(String(format: "%.2f", price))"
+//            self.memoryAndCPULabel.text = "\(memory)MB / \(vcpus)CPUs"
+//            self.diskLabel.text = "\(disk)GB SSD"
+//            self.transferLabel.text = "Transfer \(transfer)TB"
+//        } else {
             self.priceLabel.text = "$ 0.00"
             self.memoryAndCPULabel.text = "0MB / 0CPUs"
             self.diskLabel.text = "0GB SSD"
             self.transferLabel.text = "Transfer 0TB"
-        }
+//        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -82,19 +83,19 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     @IBAction func savePressed(sender: AnyObject) {
         
         if self.hostnameField.text == "" {
-            makeTextToast("Hostname can not be blank!", view: self.view.window!)
+            makeTextToast(message: "Hostname can not be blank!", view: self.view.window!)
             return
         }
         if self.sizeDic == nil {
-            makeTextToast("You must select size!", view: self.view.window!)
+            makeTextToast(message: "You must select size!", view: self.view.window!)
             return
         }
         if self.imageDic == nil {
-            makeTextToast("You must select image!", view: self.view.window!)
+            makeTextToast(message: "You must select image!", view: self.view.window!)
             return
         }
         if self.regionDic == nil {
-            makeTextToast("You must select region!", view: self.view.window!)
+            makeTextToast(message: "You must select region!", view: self.view.window!)
             return
         }
         
@@ -106,103 +107,97 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         ]
         
         let name:String = self.hostnameField.text!
-        let size:String = self.sizeDic.valueForKey("slug") as! String
-        let image:String = self.imageDic.valueForKey("slug") as! String
-        let region:String = self.regionDic.valueForKey("slug") as! String
-        var key:Int!
-        var keyarr:NSArray = []
-        if let _ = self.sshkeyDic {
-            key = self.sshkeyDic.valueForKey("id") as! Int
-            keyarr = [key]
-        }
+        let size:String = self.sizeDic.slug
+        let image:String = self.imageDic.slug
+        let region:String = self.regionDic.slug
+        let keyarr = [sshkeyDic.id]
         
         
-        let parameters:[String: AnyObject]? = [
+        
+        let parameters:Parameters = [
             "name":name,
             "region":region,
             "size":size,
             "image":image,
             "ssh_keys":keyarr,
-            "backups":self.backupsSwitch.on,
-            "ipv6":self.ipv6Switch.on,
-            "user_data":"null",
-            "private_networking":self.privateNetworkingSwitch.on
+            "backups":self.backupsSwitch.isOn,
+            "ipv6":self.ipv6Switch.isOn,
+//            "user_data": nil,
+            "private_networking":self.privateNetworkingSwitch.isOn
         ]
+        
+        print(dictionary2JsonString(dic: parameters))
+    
         
         let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
         self.view.window?.addSubview(hud)
-        hud.mode = MBProgressHUDMode.Indeterminate
-        hud.showAnimated(true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.show(animated: true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
-        Alamofire.request(.POST, BASE_URL+URL_DROPLETS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_DROPLETS, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
                 
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hideAnimated(true)
-                    if let message = dic.valueForKey("message") {
+                DispatchQueue.main.async {
+                    hud.hide(animated: true)
+                    if let message = dic.value(forKey: "message") {
                         print(message)
-                        makeTextToast(message as! String, view: strongSelf.view.window!)
+                        makeTextToast(message: message as! String, view: strongSelf.view.window!)
                     } else {
                         strongSelf.delegate?.didAddDroplet()
-                        strongSelf.dismissViewControllerAnimated(true, completion: {
+                        strongSelf.dismiss(animated: true, completion: {
                             
                         })
                     }
-                })
+                }
             }
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "selectimage" {
-            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let nv:UINavigationController = segue.destination as! UINavigationController
             let vc:ImageTableView = nv.topViewController as! ImageTableView
             vc.delegate = self
         } else if segue.identifier == "selectsize" {
-            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let nv:UINavigationController = segue.destination as! UINavigationController
             let vc:SizeTableView = nv.topViewController as! SizeTableView
             vc.delegate = self
         } else if segue.identifier == "selectregion" {
-            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let nv:UINavigationController = segue.destination as! UINavigationController
             let vc:RegionTableView = nv.topViewController as! RegionTableView
             vc.delegate = self
         } else if segue.identifier == "selectkey" {
-            let nv:UINavigationController = segue.destinationViewController as! UINavigationController
+            let nv:UINavigationController = segue.destination as! UINavigationController
             let vc:SSHKeyTableView = nv.topViewController as! SSHKeyTableView
             vc.delegate = self
         }
     }
     
     // MARK: - delegate of ImageTableView
-    func didSelectImage(slug: NSDictionary) {
-        self.imageDic = slug
+    func didSelectImage(image: ImageTeplete) {
+        self.imageDic = image
         weak var weakSelf = self
-        dispatch_async(dispatch_get_main_queue()) { 
-            weakSelf!.imageField.text = slug.valueForKey("slug") as? String
+        DispatchQueue.main.async {
+            weakSelf!.imageField.text = self.imageDic.slug
         }
     }
     
     // MARK: - delegate of SizeTableView
-    func didSelectSize(size: NSDictionary) {
+    func didSelectSize(size: SizeTeplete) {
         self.sizeDic = size
         weak var weakSelf = self
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             if let strongSelf = weakSelf {
                 
-                let memory:Int = size.valueForKey("memory") as! Int
-                let price:Float = size.valueForKey("price_monthly") as! Float
-                let disk:Int = size.valueForKey("disk") as! Int
-                let transfer:Int = size.valueForKey("transfer") as! Int
-                let vcpus:Int = size.valueForKey("vcpus") as! Int
                 
-                strongSelf.priceLabel.text = "$\(String(format: "%.2f", price))"
-                strongSelf.memoryAndCPULabel.text = "\(memory)MB / \(vcpus)CPUs"
-                strongSelf.diskLabel.text = "\(disk)GB SSD"
-                strongSelf.transferLabel.text = "Transfer \(transfer)TB"
+                strongSelf.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
+                strongSelf.memoryAndCPULabel.text = "\(size.memory)MB / \(size.vcpus)CPUs"
+                strongSelf.diskLabel.text = "\(size.disk)GB SSD"
+                strongSelf.transferLabel.text = "Transfer \(size.transfer)TB"
                 
             }
             
@@ -210,51 +205,51 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     }
     
     // MARK: - delegate of RegionTableView
-    func didSelectRegion(region: NSDictionary) {
+    func didSelectRegion(region: RegionTeplete) {
         self.regionDic = region
         weak var weakSelf = self
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async {
             if let strongSelf = weakSelf {
-                strongSelf.regionField.text = region.valueForKey("slug") as? String
+                strongSelf.regionField.text = region.slug
             }
         }
     }
     
     // MARK: - delegate of SSHKeyTableView
-    func didSelectSSHKey(key: NSDictionary) {
+    func didSelectSSHKey(key: SSHKeyTeplete) {
         self.sshkeyDic = key
         weak var weakSelf = self
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async {
             if let strongSelf = weakSelf {
-                strongSelf.SSHKeyField.text = key.valueForKey("name") as? String
+                strongSelf.SSHKeyField.text = key.name
             }
         }
     }
     
     // MARK: - delegate of UITextField
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        if string.characters.count == 0 {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string.count == 0 {
             return true
         }
-        let nStr:NSString = NSString(format: "\(string)")
+        let nStr:NSString = NSString(format: "\(string)" as NSString)
         
-        let uchar:unichar = nStr.characterAtIndex(0)
+        let uchar:unichar = nStr.character(at: 0)
         
-        if uchar >= NSString(format: "a").characterAtIndex(0) && uchar <= NSString(format: "z").characterAtIndex(0) {
+        if uchar >= NSString(format: "a").character(at: 0) && uchar <= NSString(format: "z").character(at: 0) {
             return true
         }
-        if uchar >= NSString(format: "A").characterAtIndex(0) && uchar <= NSString(format: "Z").characterAtIndex(0) {
+        if uchar >= NSString(format: "A").character(at: 0) && uchar <= NSString(format: "Z").character(at: 0) {
             return true
         }
-        if uchar >= NSString(format: "1").characterAtIndex(0) && uchar <= NSString(format: "0").characterAtIndex(0) {
+        if uchar >= NSString(format: "1").character(at: 0) && uchar <= NSString(format: "0").character(at: 0) {
             return true
         }
-        if uchar == NSString(format: "-").characterAtIndex(0) {
+        if uchar == NSString(format: "-").character(at: 0) {
             return true
         }
         

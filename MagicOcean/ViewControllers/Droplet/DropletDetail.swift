@@ -9,14 +9,27 @@
 import UIKit
 import Alamofire
 import MBProgressHUD
+import SwiftyJSON
 
 @objc public protocol DropletDelegate {
     func didSeleteDroplet()
 }
 
+struct DropletTeplete {
+    var name:String
+    var imageSlug:String
+    var regionSlug:String
+    var price:Int
+    var memory:Int
+    var vcpus:Int
+    var transfer:Int
+    var disk:Int
+    var status:String
+}
+
 class DropletDetail: UITableViewController {
     
-    var droplet:NSDictionary!
+    var dropletData:DropletTeplete?
     @IBOutlet weak var imageLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var memAndCPULabel: UILabel!
@@ -30,35 +43,35 @@ class DropletDetail: UITableViewController {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = Droplet.sharedInstance.Name
         
-        if let result:NSData = NSUserDefaults().objectForKey("droplet\(Droplet.sharedInstance.ID)") as? NSData {
-            
-            self.droplet = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSDictionary
-            
-            self.title = droplet.valueForKey("name") as? String
-            
-            self.imageLabel.text = droplet.valueForKey("image")?.valueForKey("slug") as? String
-            
-            let price:Float = droplet.valueForKey("size")?.valueForKey("price_monthly") as! Float
-            self.priceLabel.text = String(format: "$%.2f", price);
-            
-            let memory:Int = droplet.valueForKey("size")?.valueForKey("memory") as! Int
-            let cpu:Int = droplet.valueForKey("size")?.valueForKey("vcpus") as! Int
-            self.memAndCPULabel.text = "\(memory)MB / \(cpu)CPUs"
-            
-            let transfer:Int = droplet.valueForKey("size")?.valueForKey("transfer") as! Int
-            self.transferLabel.text = "Transfer \(transfer)TB"
-            
-            let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
-            self.regionLabel.text = region
-            
-            let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
-            self.diskLabel.text = "\(disk)GB SSD"
-            
-        }
+//        if let result:NSData = UserDefaults().object(forKey: "droplet\(Droplet.sharedInstance.ID)") as? NSData {
+//
+//            self.droplet = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as? NSDictionary
+//
+//            self.title = droplet.value(forKey: "name") as? String
+//
+//            self.imageLabel.text = (droplet.value(forKey: "image")? as AnyObject).value("slug") as? String
+//
+//            let price:Float = (droplet.value(forKey: "size")? as AnyObject).value("price_monthly") as! Float
+//            self.priceLabel.text = String(format: "$%.2f", price);
+//
+//            let memory:Int = (droplet.value(forKey: "size")? as AnyObject).valueForKey("memory") as! Int
+//            let cpu:Int = (droplet.value(forKey: "size")? as AnyObject).valueForKey("vcpus") as! Int
+//            self.memAndCPULabel.text = "\(memory)MB / \(cpu)CPUs"
+//
+//            let transfer:Int = (droplet.valueForKey("size")? as AnyObject).valueForKey("transfer") as! Int
+//            self.transferLabel.text = "Transfer \(transfer)TB"
+//
+//            let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
+//            self.regionLabel.text = region
+//
+//            let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
+//            self.diskLabel.text = "\(disk)GB SSD"
+//
+//        }
         
         loadDropletDetail()
     }
@@ -72,36 +85,30 @@ class DropletDetail: UITableViewController {
         ]
         
         weak var weakSelf = self
-        Alamofire.request(.GET, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)", parameters: nil, encoding: .URL, headers: Headers).responseJSON { response in
-            if let _ = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
-                let droplet:NSDictionary = (dic.valueForKey("droplet") as? NSDictionary)!
-                self.droplet = droplet
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.title = droplet.valueForKey("name") as? String
-                    
-                    self.imageLabel.text = droplet.valueForKey("image")?.valueForKey("slug") as? String
-                    
-                    let price:Float = droplet.valueForKey("size")?.valueForKey("price_monthly") as! Float
-                    self.priceLabel.text = String(format: "$%.2f", price);
-                    
-                    let memory:Int = droplet.valueForKey("size")?.valueForKey("memory") as! Int
-                    let cpu:Int = droplet.valueForKey("size")?.valueForKey("vcpus") as! Int
-                    self.memAndCPULabel.text = "\(memory)MB / \(cpu)CPUs"
-                    
-                    let transfer:Int = droplet.valueForKey("size")?.valueForKey("transfer") as! Int
-                    self.transferLabel.text = "Transfer \(transfer)TB"
-                    
-                    let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
-                    self.regionLabel.text = region
-                    
-                    let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
-                    self.diskLabel.text = "\(disk)GB SSD"
-                    
-                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(droplet)
-                    NSUserDefaults().setObject(nsData, forKey: "droplet\(Droplet.sharedInstance.ID)")
-                })
+        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+            
+            if let strongSelf = weakSelf {
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print(jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            strongSelf.dropletData = DropletTeplete(name: json["droplet"]["name"].string ?? "", imageSlug: json["droplet"]["image"]["slug"].string ?? "", regionSlug: json["droplet"]["region"]["slug"].string ?? "", price: json["droplet"]["size"]["price_monthly"].int ?? 0, memory: json["droplet"]["size"]["memory"].int ?? 0, vcpus: json["droplet"]["size"]["vcpus"].int ?? 0, transfer: json["droplet"]["size"]["transfer"].int ?? 0, disk: json["droplet"]["size"]["disk"].int ?? 0, status: json["droplet"]["status"].string ?? "")
+                            DispatchQueue.main.async {
+                                if let dd = strongSelf.dropletData {
+                                    strongSelf.title = dd.name
+                                    strongSelf.imageLabel.text = dd.imageSlug
+                                    strongSelf.priceLabel.text = String(format: "$%.2f", Float(dd.price));
+                                    strongSelf.memAndCPULabel.text = "\(dd.memory)MB / \(dd.vcpus)CPUs"
+                                    strongSelf.transferLabel.text = "Transfer \(dd.transfer)TB"
+                                    strongSelf.regionLabel.text = dd.regionSlug
+                                    strongSelf.diskLabel.text = "\(dd.disk)GB SSD"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -109,36 +116,35 @@ class DropletDetail: UITableViewController {
     @IBAction func actionPressed(sender: AnyObject) {
         
         weak var weakSelf = self
-        let alertController = UIAlertController(title: "Actions", message: "Choose the action you want.", preferredStyle: .Alert)
-        
+        let alertController = UIAlertController(title: "Actions", message: "Choose the action you want.", preferredStyle: .actionSheet)
+
         // Reboot
-        let dateAction = UIAlertAction(title: "Reboot", style: .Default) { (action:UIAlertAction!) in
+        let dateAction = UIAlertAction(title: "Reboot", style: .default) { (action:UIAlertAction!) in
             print("you have pressed the Reboot button");
-            weakSelf!.dropletActions("reboot")
+            weakSelf!.dropletActions(type: "reboot")
         }
         alertController.addAction(dateAction)
         // Power Off
-        let status:String = droplet.valueForKey("status") as! String
-        if status == "off" {
-            let powerAction = UIAlertAction(title: "Power On", style: .Destructive) { (action:UIAlertAction!) in
+        if dropletData?.status == "off" {
+            let powerAction = UIAlertAction(title: "Power On", style: .destructive) { (action:UIAlertAction!) in
                 print("you have pressed the Power On button");
-                weakSelf!.dropletActions("power_on")
+                weakSelf!.dropletActions(type: "power_on")
             }
             alertController.addAction(powerAction)
-        } else if status == "active" {
-            let powerAction = UIAlertAction(title: "Power Off", style: .Default) { (action:UIAlertAction!) in
+        } else if dropletData?.status == "active" {
+            let powerAction = UIAlertAction(title: "Power Off", style: .default) { (action:UIAlertAction!) in
                 print("you have pressed the Power Off button");
-                weakSelf!.dropletActions("power_off")
+                weakSelf!.dropletActions(type: "power_off")
             }
             alertController.addAction(powerAction)
         }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action:UIAlertAction!) in
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction!) in
             print("you have pressed the cancel button");
         }
         alertController.addAction(cancelAction)
-        
-        self.presentViewController(alertController, animated: true, completion:nil)
+
+        self.present(alertController, animated: true, completion:nil)
     }
     
     func dropletActions(type: String) {
@@ -153,17 +159,17 @@ class DropletDetail: UITableViewController {
         let hud:MBProgressHUD = MBProgressHUD.init(view: self.view.window!)
         
         self.view.window?.addSubview(hud)
-        hud.mode = MBProgressHUDMode.Indeterminate
-        hud.showAnimated(true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.show(animated: true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
         print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS)
-        Alamofire.request(.POST, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, parameters: parameters, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
-                dispatch_async(dispatch_get_main_queue(), { 
-                    hud.hideAnimated(true)
-                })
+                DispatchQueue.main.async {
+                    hud.hide(animated: true)
+                }
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
             }
@@ -173,39 +179,39 @@ class DropletDetail: UITableViewController {
     
     @IBAction func powerCyclePressed(sender: AnyObject) {
         weak var weakSelf = self
-        let alertController = UIAlertController(title: "Warnnig", message: "This action will not undo!", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Warnnig", message: "This action will not undo!", preferredStyle: .actionSheet)
         
-        let dateAction = UIAlertAction(title: "Power Cycle", style: .Destructive) { (action:UIAlertAction!) in
-            weakSelf!.dropletActions("power_cycle")
+        let dateAction = UIAlertAction(title: "Power Cycle", style: .destructive) { (action:UIAlertAction!) in
+            weakSelf!.dropletActions(type: "power_cycle")
         }
         alertController.addAction(dateAction)
         
-        let cancellAction = UIAlertAction(title: "Cancell", style: .Cancel) { (action:UIAlertAction!) in
+        let cancellAction = UIAlertAction(title: "Cancell", style: .cancel) { (action:UIAlertAction!) in
             
         }
         alertController.addAction(cancellAction)
         
-        self.presentViewController(alertController, animated: true, completion:nil)
+        self.present(alertController, animated: true, completion:nil)
     }
     
     @IBAction func deletePressed(sender: AnyObject) {
         weak var weakSelf = self
-        let alertController = UIAlertController(title: "Warnnig", message: "This action will not undo!", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Warnnig", message: "This action will not undo!", preferredStyle: .actionSheet)
         
         // Reboot
-        let dateAction = UIAlertAction(title: "Delete", style: .Destructive) { (action:UIAlertAction!) in
+        let dateAction = UIAlertAction(title: "Delete", style: .destructive) { (action:UIAlertAction!) in
             weakSelf!.deleteDroplet()
         }
         alertController.addAction(dateAction)
         
         
-        let cancellAction = UIAlertAction(title: "Cancell", style: .Cancel) { (action:UIAlertAction!) in
+        let cancellAction = UIAlertAction(title: "Cancell", style: .cancel) { (action:UIAlertAction!) in
             
         }
         alertController.addAction(cancellAction)
 
         
-        self.presentViewController(alertController, animated: true, completion:nil)
+        self.present(alertController, animated: true, completion:nil)
         
     }
     
@@ -218,26 +224,26 @@ class DropletDetail: UITableViewController {
         
         let hud:MBProgressHUD = MBProgressHUD(view: self.view.window!)
         self.view.window?.addSubview(hud)
-        hud.mode = MBProgressHUDMode.Indeterminate
-        hud.showAnimated(true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.show(animated: true)
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
-        Alamofire.request(.DELETE, BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
-            dispatch_async(dispatch_get_main_queue(), { 
-                hud.hideAnimated(true)
-            })
+        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", method: .delete, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+            DispatchQueue.main.async {
+                hud.hide(animated: true)
+            }
             if let strongSelf = weakSelf {
                 if response.response?.statusCode == 204 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async {
                         strongSelf.delegate?.didSeleteDroplet()
-                        strongSelf.navigationController?.popViewControllerAnimated(true)
-                    })
+                        strongSelf.navigationController?.popViewController(animated: true)
+                    }
                 } else if response.response?.statusCode == 442 {
                     let dic = response.result.value as! NSDictionary
                     print("response=\(dic)")
-                    if let message = dic.valueForKey("message") {
-                        makeTextToast(message as! String, view: strongSelf.view.window!)
+                    if let message = dic.value(forKey: "message") {
+                        makeTextToast(message: message as! String, view: strongSelf.view.window!)
                     }
                 }
             }

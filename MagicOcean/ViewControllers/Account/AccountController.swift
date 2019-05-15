@@ -18,10 +18,10 @@ class AccountController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLabel.text = Account.sharedInstance.Email
         self.dropletLimitLabel.text = "\(Account.sharedInstance.LimitofDroplet)"
@@ -33,13 +33,13 @@ class AccountController: UITableViewController {
     @IBAction func LogoutPressed(sender: AnyObject) {
         Account.sharedInstance.logoutUser()
 //        self.navigationController?.popViewControllerAnimated(true)
-        self.dismissViewControllerAnimated(true) { 
+        self.dismiss(animated: true) {
             
         }
     }
     
     @IBAction func donePressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) { 
+        self.dismiss(animated: true) {
             
         }
     }
@@ -51,22 +51,23 @@ class AccountController: UITableViewController {
         ]
         
         weak var weakSelf = self
-        Alamofire.request(.GET, BASE_URL+URL_ACCOUNT, parameters: nil, encoding: .URL, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_ACCOUNT, method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")
-                let account:NSDictionary = dic.valueForKey("account") as! NSDictionary
-                Account.sharedInstance.LimitofDroplet = account.valueForKey("droplet_limit") as! Int
-                Account.sharedInstance.LimitofFloatingIP = account.valueForKey("floating_ip_limit") as! Int
-                Account.sharedInstance.EmailVerfied = account.valueForKey("email_verified") as! Int
-                Account.sharedInstance.AccountStatus = account.valueForKey("status") as! String
+                let account:NSDictionary = dic.value(forKey: "account") as! NSDictionary
+                Account.sharedInstance.LimitofDroplet = account.value(forKey: "droplet_limit") as! Int
+                Account.sharedInstance.LimitofFloatingIP = account.value(forKey: "floating_ip_limit") as! Int
+                Account.sharedInstance.EmailVerfied = account.value(forKey: "email_verified") as! Int
+                Account.sharedInstance.AccountStatus = account.value(forKey: "status") as! String
                 Account.sharedInstance.saveUser()
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async {
                     self.emailLabel.text = Account.sharedInstance.Email
                     self.dropletLimitLabel.text = "\(Account.sharedInstance.LimitofDroplet)"
                     self.floatingIpLimitLabel.text = "\(Account.sharedInstance.LimitofFloatingIP)"
                     self.statusLabel.text = "\(Account.sharedInstance.AccountStatus)"
-                })
+                }
+                
             }
         }
     }

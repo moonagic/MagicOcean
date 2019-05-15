@@ -26,64 +26,58 @@ class Account {
     
     
     func saveUser() {
-        NSUserDefaults().setObject(Name, forKey: "Name")
-        NSUserDefaults().setObject(Access_Token, forKey: "Access_Token")
-        NSUserDefaults().setObject(UUID, forKey: "UUID")
-        NSUserDefaults().setObject(Email, forKey: "Email")
-        NSUserDefaults().setObject(Refresh_Token, forKey: "Refresh_Token")
-        NSUserDefaults().setObject(TokenType, forKey: "TokenType")
+        UserDefaults().set(Name, forKey: "Name")
+        UserDefaults().set(Access_Token, forKey: "Access_Token")
+        UserDefaults().set(UUID, forKey: "UUID")
+        UserDefaults().set(Email, forKey: "Email")
+        UserDefaults().set(Refresh_Token, forKey: "Refresh_Token")
+        UserDefaults().set(TokenType, forKey: "TokenType")
         
-        NSUserDefaults().setInteger(EmailVerfied, forKey: "EmailVerfied")
-        NSUserDefaults().setInteger(LimitofDroplet, forKey: "LimitofDroplet")
-        NSUserDefaults().setInteger(LimitofFloatingIP, forKey: "LimitofFloatingIP")
-        NSUserDefaults().setObject(AccountStatus, forKey: "AccountStatus")
+        UserDefaults().set(EmailVerfied, forKey: "EmailVerfied")
+        UserDefaults().set(LimitofDroplet, forKey: "LimitofDroplet")
+        UserDefaults().set(LimitofFloatingIP, forKey: "LimitofFloatingIP")
+        UserDefaults().set(AccountStatus, forKey: "AccountStatus")
     }
     
     func logoutUser() {
-        NSUserDefaults().setObject("", forKey: "Name")
-        NSUserDefaults().setObject("", forKey: "Access_Token")
-        NSUserDefaults().setObject("", forKey: "UUID")
-        NSUserDefaults().setObject("", forKey: "Email")
-        NSUserDefaults().setObject("", forKey: "Refresh_Token")
-        NSUserDefaults().setObject("", forKey: "TokenType")
+        UserDefaults().set("", forKey: "Name")
+        UserDefaults().set("", forKey: "Access_Token")
+        UserDefaults().set("", forKey: "UUID")
+        UserDefaults().set("", forKey: "Email")
+        UserDefaults().set("", forKey: "Refresh_Token")
+        UserDefaults().set("", forKey: "TokenType")
         
-        NSUserDefaults().setInteger(0, forKey: "EmailVerfied")
-        NSUserDefaults().setInteger(0, forKey: "LimitofDroplet")
-        NSUserDefaults().setInteger(0, forKey: "LimitofFloatingIP")
-        NSUserDefaults().setObject("", forKey: "AccountStatus")
+        UserDefaults().set(0, forKey: "EmailVerfied")
+        UserDefaults().set(0, forKey: "LimitofDroplet")
+        UserDefaults().set(0, forKey: "LimitofFloatingIP")
+        UserDefaults().set("", forKey: "AccountStatus")
     }
     
     func loadUser() {
-        if let result:String = NSUserDefaults().objectForKey("Name") as? String {
+        if let result:String = UserDefaults().object(forKey: "Name") as? String {
             Name = result
         }
-        if let result:String = NSUserDefaults().objectForKey("Access_Token") as? String {
+        if let result:String = UserDefaults().object(forKey: "Access_Token") as? String {
             Access_Token = result
         }
-        if let result:String = NSUserDefaults().objectForKey("UUID") as? String {
+        if let result:String = UserDefaults().object(forKey: "UUID") as? String {
             UUID = result
         }
-        if let result:String = NSUserDefaults().objectForKey("Email") as? String {
+        if let result:String = UserDefaults().object(forKey: "Email") as? String {
             Email = result
         }
-        if let result:String = NSUserDefaults().objectForKey("Refresh_Token") as? String {
+        if let result:String = UserDefaults().object(forKey: "Refresh_Token") as? String {
             Refresh_Token = result
         }
-        if let result:String = NSUserDefaults().objectForKey("TokenType") as? String {
+        if let result:String = UserDefaults().object(forKey: "TokenType") as? String {
             TokenType = result
         }
-        if let result:String = NSUserDefaults().objectForKey("AccountStatus") as? String {
+        if let result:String = UserDefaults().object(forKey: "AccountStatus") as? String {
             AccountStatus = result
         }
-        if let result:Int = NSUserDefaults().integerForKey("EmailVerfied") {
-            EmailVerfied = result
-        }
-        if let result:Int = NSUserDefaults().integerForKey("LimitofDroplet") {
-            LimitofDroplet = result
-        }
-        if let result:Int = NSUserDefaults().integerForKey("LimitofFloatingIP") {
-            LimitofFloatingIP = result
-        }
+        EmailVerfied = UserDefaults().integer(forKey: "EmailVerfied")
+        LimitofDroplet = UserDefaults().integer(forKey: "LimitofDroplet")
+        LimitofFloatingIP = UserDefaults().integer(forKey: "LimitofFloatingIP")
     }
     
     

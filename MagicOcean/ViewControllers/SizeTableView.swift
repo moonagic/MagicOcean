@@ -9,30 +9,42 @@
 import UIKit
 import MJRefresh
 import Alamofire
+import SwiftyJSON
 
-@objc public protocol SelectSizeDelegate {
-    func didSelectSize(size: NSDictionary)
+struct SizeTeplete {
+    var memory:Int
+    var price:Int
+    var disk:Int
+    var transfer:Int
+    var vcpus:Int
+    var slug:String
+}
+
+
+protocol SelectSizeDelegate {
+    func didSelectSize(size: SizeTeplete)
 }
 
 class SizeTableView: UITableViewController {
     
     var data:NSMutableArray = []
-    weak var delegate: SelectSizeDelegate?
+    var sizeData:[SizeTeplete] = Array<SizeTeplete>()
+    var delegate: SelectSizeDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBarAndNavigationBar(self.navigationController!)
+        setStatusBarAndNavigationBar(navigation: self.navigationController!)
         
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
         
         setupMJRefresh()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let result:NSData = NSUserDefaults().objectForKey("sizes") as? NSData {
+        if let result:NSData = UserDefaults().object(forKey: "sizes") as? NSData {
             
-            self.data = NSKeyedUnarchiver.unarchiveObjectWithData(result) as! NSMutableArray
+            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
         } else {
             self.tableView.mj_header.beginRefreshing()
         }
@@ -40,61 +52,53 @@ class SizeTableView: UITableViewController {
     
     func setupMJRefresh() {
         let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header.automaticallyChangeAlpha = true;
+        header?.isAutomaticallyChangeAlpha = true;
         
-        header.lastUpdatedTimeLabel.hidden = true;
+        header?.lastUpdatedTimeLabel.isHidden = true;
         self.tableView.mj_header = header;
         
     }
     
-    func mjRefreshData() {
-        self.loadSizes(1, per_page: 10)
+    @objc func mjRefreshData() {
+        self.loadSizes(page: 1, per_page: 100)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 91
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sizeData.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "sizecell"
-        let cell:SizeCell = tableView.dequeueReusableCellWithIdentifier(identifier) as! SizeCell
+        let cell:SizeCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! SizeCell
         
-        let dic = self.data.objectAtIndex(indexPath.row)
-        
-        let memory:Int = dic.valueForKey("memory") as! Int
-        let price:Float = dic.valueForKey("price_monthly") as! Float
-        let disk:Int = dic.valueForKey("disk") as! Int
-        let transfer:Int = dic.valueForKey("transfer") as! Int
-        let vcpus:Int = dic.valueForKey("vcpus") as! Int
-        
-        
-        cell.priceLabel.text = "$\(String(format: "%.2f", price))"
-        cell.memoryAndCPUsLabel.text = "\(memory)MB / \(vcpus)CPUs"
-        cell.diskLabel.text = "\(disk)GB SSD"
-        cell.transferLabel.text = "Transfer \(transfer)TB"
+        let size = sizeData[indexPath.row]
+        cell.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
+        cell.memoryAndCPUsLabel.text = "\(size.memory)MB / \(size.vcpus)CPUs"
+        cell.diskLabel.text = "\(size.disk)GB SSD"
+        cell.transferLabel.text = "Transfer \(size.transfer)TB"
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let size:NSDictionary = self.data.objectAtIndex(indexPath.row) as! NSDictionary
-        self.delegate?.didSelectSize(size)
-        self.dismissViewControllerAnimated(true) { 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let size = sizeData[indexPath.row]
+        self.delegate?.didSelectSize(size: size)
+        self.dismiss(animated: true) {
             
         }
     }
     
     @IBAction func cancellPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
     }
@@ -108,26 +112,28 @@ class SizeTableView: UITableViewController {
         
         weak var weakSelf = self
         
-        Alamofire.request(.GET, BASE_URL+URL_SIZES+"?page=\(page)&per_page=\(per_page)", parameters: nil, encoding: .JSON, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_SIZES+"?page=\(page)&per_page=\(per_page)", method: .get
+            , parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
-                let dic = response.result.value as! NSDictionary
-                print("response=\(dic)")
-                if page == 1 {
-                    strongSelf.data.removeAllObjects()
-                }
-                let arr:NSArray = dic.valueForKey("sizes") as! NSArray
-                if let localArr:NSArray = arr {
-                    
-                    for index in 1...localArr.count {
-                        strongSelf.data.addObject(localArr.objectAtIndex(index-1))
+                
+                if let JSONObj = response.result.value {
+                    let dic = JSONObj as! NSDictionary
+                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
+                    print(jsonString)
+                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
+                        if let json = try? JSON(data: dataFromString) {
+                            if let sizes = json["sizes"].array {
+                                for s in sizes {
+                                    strongSelf.sizeData.append(SizeTeplete(memory: s["memory"].int!, price: s["price_monthly"].int!, disk: s["disk"].int!, transfer: s["transfer"].int!, vcpus: s["vcpus"].int!, slug: s["slug"].string!))
+                                }
+                            }
+                        }
                     }
-                    let nsData:NSData = NSKeyedArchiver.archivedDataWithRootObject(strongSelf.data)
-                    NSUserDefaults().setObject(nsData, forKey: "sizes")
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
-                })
+                }
             }
         }
     }
