@@ -93,9 +93,9 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
         let regionDic:NSDictionary = dic.value(forKey: "region") as! NSDictionary
         let sizeDic:NSDictionary = dic.value(forKey: "size") as! NSDictionary
         
-        let imageSlug:String = imageDic.value(forKey: "slug") as! String
-        let regionSlug:String = regionDic.value(forKey: "slug") as! String
-        let sizeSlug:String = sizeDic.value(forKey: "slug") as! String
+        let imageSlug:String = imageDic.value(forKey: "slug") as? String ?? "unknow image"
+        let regionSlug:String = regionDic.value(forKey: "slug") as? String ?? "-"
+        let sizeSlug:String = sizeDic.value(forKey: "slug") as? String ?? "-"
         let disksizeSlug:Int = sizeDic.value(forKey: "disk") as! Int
         
         cell.infoLabel.text = "\(imageSlug) - \(sizeSlug) - \(disksizeSlug)G"

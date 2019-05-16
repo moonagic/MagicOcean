@@ -94,7 +94,7 @@ class DropletDetail: UITableViewController {
                     print(jsonString)
                     if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
                         if let json = try? JSON(data: dataFromString) {
-                            strongSelf.dropletData = DropletTeplete(name: json["droplet"]["name"].string ?? "", imageSlug: json["droplet"]["image"]["slug"].string ?? "", regionSlug: json["droplet"]["region"]["slug"].string ?? "", price: json["droplet"]["size"]["price_monthly"].int ?? 0, memory: json["droplet"]["size"]["memory"].int ?? 0, vcpus: json["droplet"]["size"]["vcpus"].int ?? 0, transfer: json["droplet"]["size"]["transfer"].int ?? 0, disk: json["droplet"]["size"]["disk"].int ?? 0, status: json["droplet"]["status"].string ?? "")
+                            strongSelf.dropletData = DropletTeplete(name: json["droplet"]["name"].string ?? "", imageSlug: json["droplet"]["image"]["slug"].string ?? "unknow image", regionSlug: json["droplet"]["region"]["slug"].string ?? "", price: json["droplet"]["size"]["price_monthly"].int ?? 0, memory: json["droplet"]["size"]["memory"].int ?? 0, vcpus: json["droplet"]["size"]["vcpus"].int ?? 0, transfer: json["droplet"]["size"]["transfer"].int ?? 0, disk: json["droplet"]["size"]["disk"].int ?? 0, status: json["droplet"]["status"].string ?? "")
                             DispatchQueue.main.async {
                                 if let dd = strongSelf.dropletData {
                                     strongSelf.title = dd.name
