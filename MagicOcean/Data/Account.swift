@@ -56,24 +56,38 @@ class Account {
     func loadUser() {
         if let result:String = UserDefaults().object(forKey: "Name") as? String {
             Name = result
+        } else {
+            Name = ""
         }
         if let result:String = UserDefaults().object(forKey: "Access_Token") as? String {
             Access_Token = result
+        } else {
+            AccountStatus = ""
         }
         if let result:String = UserDefaults().object(forKey: "UUID") as? String {
             UUID = result
+        } else {
+            UUID = ""
         }
         if let result:String = UserDefaults().object(forKey: "Email") as? String {
             Email = result
+        } else {
+            Email = ""
         }
         if let result:String = UserDefaults().object(forKey: "Refresh_Token") as? String {
             Refresh_Token = result
+        } else {
+            Refresh_Token = ""
         }
         if let result:String = UserDefaults().object(forKey: "TokenType") as? String {
             TokenType = result
+        } else {
+            TokenType = ""
         }
         if let result:String = UserDefaults().object(forKey: "AccountStatus") as? String {
             AccountStatus = result
+        } else {
+            AccountStatus = ""
         }
         EmailVerfied = UserDefaults().integer(forKey: "EmailVerfied")
         LimitofDroplet = UserDefaults().integer(forKey: "LimitofDroplet")

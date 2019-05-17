@@ -110,7 +110,10 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         let size:String = self.sizeDic.slug
         let image:String = self.imageDic.slug
         let region:String = self.regionDic.slug
-        let keyarr = [sshkeyDic.id]
+        var keyarr:[Int] = Array<Int>()
+        if sshkeyDic != nil {
+            keyarr = [sshkeyDic.id]
+        }
         
         
         

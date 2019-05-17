@@ -52,26 +52,31 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
                 needReload = false
             }
         } else {
-            self.performSegue(withIdentifier: "gotologin", sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "gotologin", sender: nil)
+            }
         }
+        
+//        DispatchQueue.main.async { [weak self] in
+//            guard let `self` = self else { return }
+//            self.dismiss(animated: true, completion: {
+//                
+//            })
+//        }
     }
     
     func setupMJRefresh() {
-        let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction:#selector(mjRefreshData))
-        header?.isAutomaticallyChangeAlpha = true;
         
-        header?.lastUpdatedTimeLabel.isHidden = true;
-        self.tableView.mj_header = header;
-//        weak var weakSelf = self
+        let header = MJRefreshNormalHeader(refreshingBlock: {
+            self.loadDroplets(page: 1, per_page:100)
+        })
+        header?.lastUpdatedTimeLabel.isHidden = true
+        header?.isAutomaticallyChangeAlpha = true
+        self.tableView.mj_header = header
+        
 //        self.tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {
-//            if let strongSelf = weakSelf {
-//                strongSelf.loadDroplets(strongSelf.page+1, per_page: 10)
-//            }
+//            self.loadDroplets(page: self.page+1, per_page: 100)
 //        })
-    }
-    
-    @objc func mjRefreshData() {
-        self.loadDroplets(page: 1, per_page:100)
     }
 
     override func didReceiveMemoryWarning() {
@@ -190,7 +195,7 @@ class DropletsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
         let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
+            NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.19, green: 0.56, blue: 0.91, alpha: 1)
         ]
         
         let attrString:NSAttributedString = NSAttributedString(string: "Create Droplet", attributes: attributes)

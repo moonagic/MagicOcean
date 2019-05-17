@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 Account.sharedInstance.saveUser()
                 
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kSafariViewControllerCloseNotification), object: url)
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kSafariViewControllerCloseNotification), object: url)
                 
                 NotificationCenter.default.post(name: Notification.Name(kSafariViewControllerCloseNotification), object: url)
                 
@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         
         weak var weakSelf = self
-        Alamofire.request(BASE_URL+URL_ACCOUNT, method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_ACCOUNT, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
                 let dic = response.result.value as! NSDictionary
                 print("response=\(dic)")

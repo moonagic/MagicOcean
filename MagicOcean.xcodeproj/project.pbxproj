@@ -253,6 +253,7 @@
 				943FE2A61D07BDB800877358 /* Frameworks */,
 				943FE2A71D07BDB800877358 /* Resources */,
 				465C81C6D2186FBB14025E04 /* [CP] Embed Pods Frameworks */,
+				733025F7228D23F400C43FF0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -344,6 +345,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MagicOcean/Pods-MagicOcean-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		733025F7228D23F400C43FF0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n";
 		};
 		E4F92A7E63EAA1FBD2CCE5F7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
