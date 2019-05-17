@@ -19,6 +19,10 @@ struct ImageTeplete {
     var distribution:String
 }
 
+struct FormatImageTeplete {
+    var section:String
+    var images:[ImageTeplete]
+}
 
 protocol SelectImageDelegate {
     func didSelectImage(image: ImageTeplete)
@@ -26,8 +30,8 @@ protocol SelectImageDelegate {
 
 class ImageTableView: UITableViewController {
     
-    var data:NSMutableArray = []
     var imagesData:[ImageTeplete] = Array<ImageTeplete>()
+    var imagesDataWithFormat:[FormatImageTeplete] = Array<FormatImageTeplete>()
     var delegate: SelectImageDelegate?
     
     
@@ -59,27 +63,35 @@ class ImageTableView: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let result:NSData = UserDefaults().object(forKey: "images") as? NSData {
-            
-            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
-        } else {
+//        if let result:NSData = UserDefaults().object(forKey: "images") as? NSData {
+        
+//            self.data = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
+//        } else {
             self.tableView.mj_header.beginRefreshing()
-        }
+//        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return imagesDataWithFormat.count
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.imagesData.count
+        return imagesDataWithFormat[section].images.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return imagesDataWithFormat[section].section
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier:String = "imagecell"
         let cell:ImageCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ImageCell
         
-        let data = self.imagesData[indexPath.row]
+        let data = imagesDataWithFormat[indexPath.section].images[indexPath.row]
         cell.titleLabel.text = "\(data.distribution) \(data.name)"
         
         return cell
@@ -87,7 +99,7 @@ class ImageTableView: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let image = self.imagesData[indexPath.row]
+        let image = self.imagesDataWithFormat[indexPath.section].images[indexPath.row]
         self.delegate?.didSelectImage(image: image)
         self.dismiss(animated: true) {
             
@@ -109,7 +121,7 @@ class ImageTableView: UITableViewController {
         
         weak var weakSelf = self
         
-        Alamofire.request(BASE_URL+URL_IMAGES+"?page=\(page)&per_page=\(per_page)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_IMAGES+"?type=distribution&page=\(page)&per_page=\(per_page)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             if let strongSelf = weakSelf {
                 
                 if let JSONObj = response.result.value {
@@ -126,10 +138,28 @@ class ImageTableView: UITableViewController {
                         }
                     }
                 }
+                self.formatImage()
                 DispatchQueue.main.async {
                     strongSelf.tableView.reloadData()
                     strongSelf.tableView.mj_header.endRefreshing()
                 }
+            }
+        }
+    }
+    
+    private func formatImage() {
+        for image in imagesData {
+            var index = -1
+            for i in 0..<imagesDataWithFormat.count {
+                if imagesDataWithFormat[i].section == image.distribution {
+                    index = i
+                    break
+                }
+            }
+            if index > -1 {
+                imagesDataWithFormat[index].images.append(image)
+            } else {
+                imagesDataWithFormat.append(FormatImageTeplete(section: image.distribution, images: [image]))
             }
         }
     }

@@ -15,21 +15,9 @@ import SwiftyJSON
     func didSeleteDroplet()
 }
 
-struct DropletTeplete {
-    var name:String
-    var imageSlug:String
-    var regionSlug:String
-    var price:Int
-    var memory:Int
-    var vcpus:Int
-    var transfer:Int
-    var disk:Int
-    var status:String
-}
-
 class DropletDetail: UITableViewController {
     
-    var dropletData:DropletTeplete?
+    var dropletData:DropletTemplate!
     @IBOutlet weak var imageLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var memAndCPULabel: UILabel!
@@ -45,72 +33,16 @@ class DropletDetail: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.title = Droplet.sharedInstance.Name
         
-//        if let result:NSData = UserDefaults().object(forKey: "droplet\(Droplet.sharedInstance.ID)") as? NSData {
-//
-//            self.droplet = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as? NSDictionary
-//
-//            self.title = droplet.value(forKey: "name") as? String
-//
-//            self.imageLabel.text = (droplet.value(forKey: "image")? as AnyObject).value("slug") as? String
-//
-//            let price:Float = (droplet.value(forKey: "size")? as AnyObject).value("price_monthly") as! Float
-//            self.priceLabel.text = String(format: "$%.2f", price);
-//
-//            let memory:Int = (droplet.value(forKey: "size")? as AnyObject).valueForKey("memory") as! Int
-//            let cpu:Int = (droplet.value(forKey: "size")? as AnyObject).valueForKey("vcpus") as! Int
-//            self.memAndCPULabel.text = "\(memory)MB / \(cpu)CPUs"
-//
-//            let transfer:Int = (droplet.valueForKey("size")? as AnyObject).valueForKey("transfer") as! Int
-//            self.transferLabel.text = "Transfer \(transfer)TB"
-//
-//            let region:String = droplet.valueForKey("region")?.valueForKey("slug") as! String
-//            self.regionLabel.text = region
-//
-//            let disk:Int = droplet.valueForKey("size")?.valueForKey("disk") as! Int
-//            self.diskLabel.text = "\(disk)GB SSD"
-//
-//        }
         
-        loadDropletDetail()
-    }
-    
-    func loadDropletDetail() {
-//        curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" "https://api.digitalocean.com/v2/droplets/3164494"
-        
-        let Headers = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+Account.sharedInstance.Access_Token
-        ]
-        
-        weak var weakSelf = self
-        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
-            
-            if let strongSelf = weakSelf {
-                if let JSONObj = response.result.value {
-                    let dic = JSONObj as! NSDictionary
-                    let jsonString = dictionary2JsonString(dic: dic as! Dictionary<String, Any>)
-                    print(jsonString)
-                    if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
-                        if let json = try? JSON(data: dataFromString) {
-                            strongSelf.dropletData = DropletTeplete(name: json["droplet"]["name"].string ?? "", imageSlug: json["droplet"]["image"]["slug"].string ?? "unknow image", regionSlug: json["droplet"]["region"]["slug"].string ?? "", price: json["droplet"]["size"]["price_monthly"].int ?? 0, memory: json["droplet"]["size"]["memory"].int ?? 0, vcpus: json["droplet"]["size"]["vcpus"].int ?? 0, transfer: json["droplet"]["size"]["transfer"].int ?? 0, disk: json["droplet"]["size"]["disk"].int ?? 0, status: json["droplet"]["status"].string ?? "")
-                            DispatchQueue.main.async {
-                                if let dd = strongSelf.dropletData {
-                                    strongSelf.title = dd.name
-                                    strongSelf.imageLabel.text = dd.imageSlug
-                                    strongSelf.priceLabel.text = String(format: "$%.2f", Float(dd.price));
-                                    strongSelf.memAndCPULabel.text = "\(dd.memory)MB / \(dd.vcpus)CPUs"
-                                    strongSelf.transferLabel.text = "Transfer \(dd.transfer)TB"
-                                    strongSelf.regionLabel.text = dd.regionSlug
-                                    strongSelf.diskLabel.text = "\(dd.disk)GB SSD"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        self.title = dropletData.name
+        self.imageLabel.text = dropletData.image.distribution
+        self.priceLabel.text = String(format: "$%.2f", Float(dropletData.size.price));
+        self.memAndCPULabel.text = "\(dropletData.size.memory)MB / \(dropletData.size.vcpus)vCPU"
+        self.transferLabel.text = "Transfer \(dropletData.size.transfer)TB"
+        self.regionLabel.text = dropletData.region.slug
+        self.diskLabel.text = "\(dropletData.size.disk)GB SSD"
+
     }
 
     @IBAction func actionPressed(sender: AnyObject) {
@@ -164,8 +96,8 @@ class DropletDetail: UITableViewController {
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
-        print(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS)
-        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/"+URL_ACTIONS, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
+        print(BASE_URL+URL_DROPLETS+"/\(dropletData.id)/"+URL_ACTIONS)
+        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(dropletData.id)/"+URL_ACTIONS, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: Headers).responseJSON { response in
             if let _ = weakSelf {
                 DispatchQueue.main.async {
                     hud.hide(animated: true)
@@ -229,7 +161,7 @@ class DropletDetail: UITableViewController {
         hud.removeFromSuperViewOnHide = true
         
         weak var weakSelf = self
-        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(Droplet.sharedInstance.ID)/", method: .delete, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
+        Alamofire.request(BASE_URL+URL_DROPLETS+"/\(dropletData.id)/", method: .delete, parameters: nil, encoding: URLEncoding.default, headers: Headers).responseJSON { response in
             DispatchQueue.main.async {
                 hud.hide(animated: true)
             }

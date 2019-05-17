@@ -20,3 +20,13 @@ let URL_SIZES = "sizes"
 let URL_REGIONS = "regions"
 let URL_KEYS = "keys"
 
+
+struct DropletTemplate {
+    var id: Int
+    var name: String
+    var ip: String
+    var status: String
+    var image: ImageTeplete
+    var region: RegionTeplete
+    var size: SizeTeplete
+}

@@ -85,11 +85,11 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="q28-x0-V7V"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="23"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ypQ-ar-kfs">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" / Month" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ypQ-ar-kfs">
                                                     <rect key="frame" x="20" y="67" width="81" height="15.666666666666671"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
@@ -283,7 +283,7 @@
                                         <rect key="frame" x="0.0" y="690.33333333333337" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WIt-lN-YMI" id="OAG-Dv-nCO">
-                                            <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="388" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="SELECT YOUR SSH KEY (OPTION)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fp7-Oq-5LZ">
@@ -679,6 +679,7 @@
                                             <outlet property="IPLabel" destination="Azg-AS-Lgh" id="Abm-2u-E1B"/>
                                             <outlet property="infoLabel" destination="NR7-Bo-eOK" id="Un0-0e-eOa"/>
                                             <outlet property="locationLabel" destination="CJU-8a-iGB" id="gM0-VM-gNW"/>
+                                            <outlet property="statusView" destination="wBQ-Ts-SsL" id="CZy-zj-RW4"/>
                                             <outlet property="subView" destination="jix-qF-RRW" id="XBH-Va-cLb"/>
                                             <outlet property="titleLabel" destination="Mb6-FX-q5o" id="vW5-pD-bVX"/>
                                         </connections>
@@ -710,7 +711,6 @@
                     <connections>
                         <outlet property="tableView" destination="wp3-B7-EvH" id="lEP-88-loh"/>
                         <segue destination="tRN-kZ-8VW" kind="show" identifier="gotologin" id="NK4-DO-UBQ"/>
-                        <segue destination="72D-yh-5Ip" kind="show" identifier="showdropletdetail" id="8op-Bf-Smm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -720,7 +720,7 @@
         <!--Title-->
         <scene sceneID="tvw-C8-RkC">
             <objects>
-                <tableViewController id="72D-yh-5Ip" customClass="DropletDetail" customModule="MagicOcean" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="dropletdetail" id="72D-yh-5Ip" customClass="DropletDetail" customModule="MagicOcean" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="GaP-CE-Jq3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1024,14 +1024,14 @@
                                             <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kay-Ht-R3n">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" / Month" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kay-Ht-R3n">
                                             <rect key="frame" x="20" y="67" width="81" height="15.666666666666671"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nOy-a3-sWX">
-                                            <rect key="frame" x="109" y="0.0" width="0.33333333333333331" height="90.666666666666657"/>
+                                            <rect key="frame" x="109" y="0.0" width="0.6666666666666714" height="90.666666666666671"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="0.5" id="CF2-C4-rvi"/>
@@ -1100,7 +1100,7 @@
                     <navigationItem key="navigationItem" title="Select Size" id="efI-Nc-tn2">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="5i8-06-CSy">
                             <connections>
-                                <action selector="cancellPressed:" destination="WHI-gJ-OZj" id="Cyg-1o-LT1"/>
+                                <action selector="cancellPressedWithSender:" destination="WHI-gJ-OZj" id="RiI-6j-fWU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

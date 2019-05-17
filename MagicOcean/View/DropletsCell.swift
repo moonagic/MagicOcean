@@ -11,6 +11,7 @@ import UIKit
 class DropletsCell: UITableViewCell {
 
     @IBOutlet weak var subView: UIView!
+    @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var IPLabel: UILabel!

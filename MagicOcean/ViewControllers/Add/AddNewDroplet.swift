@@ -45,25 +45,10 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         
         self.hostnameField.delegate = self
         
-//        if let result:NSData = UserDefaults().object(forKey: "sizes") as? NSData {
-//            let sizes:NSMutableArray = NSKeyedUnarchiver.unarchiveObject(with: result as Data) as! NSMutableArray
-//            self.sizeDic = (sizes[0] as! NSDictionary)
-//            let memory:Int = self.sizeDic.value(forKey: "memory") as! Int
-//            let price:Float = self.sizeDic.value(forKey: "price_monthly") as! Float
-//            let disk:Int = self.sizeDic.value(forKey: "disk") as! Int
-//            let transfer:Int = self.sizeDic.value(forKey: "transfer") as! Int
-//            let vcpus:Int = self.sizeDic.value(forKey: "vcpus") as! Int
-//            
-//            self.priceLabel.text = "$\(String(format: "%.2f", price))"
-//            self.memoryAndCPULabel.text = "\(memory)MB / \(vcpus)CPUs"
-//            self.diskLabel.text = "\(disk)GB SSD"
-//            self.transferLabel.text = "Transfer \(transfer)TB"
-//        } else {
-            self.priceLabel.text = "$ 0.00"
-            self.memoryAndCPULabel.text = "0MB / 0CPUs"
-            self.diskLabel.text = "0GB SSD"
-            self.transferLabel.text = "Transfer 0TB"
-//        }
+        self.priceLabel.text = "$ 0.00"
+        self.memoryAndCPULabel.text = "0MB / 0CPUs"
+        self.diskLabel.text = "0GB SSD"
+        self.transferLabel.text = "Transfer 0TB"
     }
     
     override func didReceiveMemoryWarning() {
