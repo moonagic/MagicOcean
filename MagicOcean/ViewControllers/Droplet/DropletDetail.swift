@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import Alamofire
 import MBProgressHUD
 import SwiftyJSON
+import Alamofire
 
 @objc public protocol DropletDelegate {
     func didSeleteDroplet()
@@ -37,7 +37,7 @@ class DropletDetail: UITableViewController {
         
         self.title = dropletData.name
         self.imageLabel.text = dropletData.image.distribution
-        self.priceLabel.text = String(format: "$%.2f", Float(dropletData.size.price));
+//        self.priceLabel.text = String(format: "$%.2f", Float(dropletData.size.price));
         self.memAndCPULabel.text = "\(dropletData.size.memory)MB / \(dropletData.size.vcpus)vCPU"
         self.transferLabel.text = "Transfer \(dropletData.size.transfer)TB"
         self.regionLabel.text = dropletData.region.slug

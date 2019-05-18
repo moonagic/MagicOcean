@@ -45,7 +45,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         
         self.hostnameField.delegate = self
         
-        self.priceLabel.text = "$ 0.00"
+//        self.priceLabel.text = "$ 0.00"
         self.memoryAndCPULabel.text = "0MB / 0CPUs"
         self.diskLabel.text = "0GB SSD"
         self.transferLabel.text = "Transfer 0TB"
@@ -182,7 +182,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
             if let strongSelf = weakSelf {
                 
                 
-                strongSelf.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
+//                strongSelf.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
                 strongSelf.memoryAndCPULabel.text = "\(size.memory)MB / \(size.vcpus)CPUs"
                 strongSelf.diskLabel.text = "\(size.disk)GB SSD"
                 strongSelf.transferLabel.text = "Transfer \(size.transfer)TB"

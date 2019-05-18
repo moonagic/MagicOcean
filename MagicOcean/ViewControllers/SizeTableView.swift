@@ -80,7 +80,7 @@ class SizeTableView: UITableViewController {
         let cell:SizeCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! SizeCell
         
         let size = sizeData[indexPath.row]
-        cell.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
+//        cell.priceLabel.text = "$\(String(format: "%.2f", Float(size.price)))"
         cell.memoryAndCPUsLabel.text = "\(size.memory)MB / \(size.vcpus)CPUs"
         cell.diskLabel.text = "\(size.disk)GB SSD"
         cell.transferLabel.text = "Transfer \(size.transfer)TB"
