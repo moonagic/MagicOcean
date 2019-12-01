@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import MBProgressHUD
+import UnsplashPhotoPicker
 
 @objc public protocol AddDropletDelegate {
     func didAddDroplet()
@@ -31,6 +32,8 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     @IBOutlet weak var privateNetworkingSwitch: UISwitch!
     @IBOutlet weak var backupsSwitch: UISwitch!
     @IBOutlet weak var ipv6Switch: UISwitch!
+    @IBOutlet weak var coverImage: UIImageView!
+    @IBOutlet weak var coverImageTag: UILabel!
     var sizeDic:SizeTeplete!
     var imageDic:ImageTeplete!
     var regionDic:RegionTeplete!
@@ -39,6 +42,7 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     weak var delegate: AddDropletDelegate?
     
+    private var imageDataTask: URLSessionDataTask?
     override func viewDidLoad() {
         super.viewDidLoad()
         setStatusBarAndNavigationBar(navigation: self.navigationController!)
@@ -61,8 +65,50 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
     
     @IBAction func cancellPressed(sender: AnyObject) {
         self.dismiss(animated: true) {
-            
+
         }
+    }
+    
+    @IBAction func selectCoverImageButtonPressed(_ sender: Any) {
+        
+        
+        
+        
+        let alertController:UIAlertController=UIAlertController(title: "Select cover image", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        alertController.addAction(UIAlertAction(title: "Photo Libray", style: UIAlertAction.Style.default){
+            (alertAction)->Void in
+            let imagePicker: UIImagePickerController = UIImagePickerController()
+            imagePicker.modalPresentationStyle = .overFullScreen
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = false
+            imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
+
+        })
+        alertController.addAction(UIAlertAction(title: "Camera", style: UIAlertAction.Style.default){
+            (alertAction)->Void in
+            let imagePicker: UIImagePickerController = UIImagePickerController()
+            imagePicker.modalPresentationStyle = .overFullScreen
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = false
+            imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            self.present(imagePicker, animated: true, completion: nil)
+
+        })
+        alertController.addAction(UIAlertAction(title: "form Unsplash", style: UIAlertAction.Style.default){
+            (alertAction)->Void in
+            let configuration = UnsplashPhotoPickerConfiguration(
+                accessKey: "7c3f947507aefaa8c5008400d78288fd13d62f32c999f4a743478b41a54f35a1",
+                secretKey: "66a8e97f1f6315fefaf73df0897019801f7ded66bf6aed2739be95fb26c0a8de",
+                allowsMultipleSelection: false
+            )
+            let unsplashPhotoPicker = UnsplashPhotoPicker(configuration: configuration)
+            unsplashPhotoPicker.photoPickerDelegate = self
+            
+            self.present(unsplashPhotoPicker, animated: true, completion: nil)
+        })
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel,handler:nil))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func savePressed(sender: AnyObject) {
@@ -244,4 +290,47 @@ class AddNewDroplet: UITableViewController, UITextFieldDelegate, SelectImageDele
         return false
     }
     
+    
+    
+}
+
+extension AddNewDroplet: UnsplashPhotoPickerDelegate {
+    func unsplashPhotoPicker(_ photoPicker: UnsplashPhotoPicker, didSelectPhotos photos: [UnsplashPhoto]) {
+        print("Unsplash photo picker did select \(photos.count) photo(s)")
+        
+        guard let url = photos[0].urls[.regular] else { return }
+        
+        imageDataTask = URLSession.shared.dataTask(with: url) { [weak self] (data, _, error) in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.imageDataTask = nil
+            
+            guard let data = data, let image = UIImage(data: data), error == nil else { return }
+            
+            DispatchQueue.main.async {
+                UIView.transition(with: strongSelf.coverImage, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+                    strongSelf.coverImage.image = image
+                }, completion: nil)
+                strongSelf.coverImageTag.isHidden = true
+            }
+        }
+        
+        imageDataTask?.resume()
+    }
+    
+    func unsplashPhotoPickerDidCancel(_ photoPicker: UnsplashPhotoPicker) {
+        print("Unsplash photo picker did cancel")
+    }
+}
+
+extension AddNewDroplet: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var image : UIImage!
+        image = (info[UIImagePickerController.InfoKey.originalImage] as! UIImage)
+        self.coverImage.image = image
+        coverImageTag.isHidden = true
+        picker.dismiss(animated: true) {
+            
+        }
+    }
 }

@@ -8,11 +8,10 @@ target 'MagicOcean' do
   # Pods for MagicOcean
   pod 'MJRefresh'
   pod 'MBProgressHUD'
-  pod '1PasswordExtension'
   pod 'DZNEmptyDataSet'
   pod 'Alamofire'
   pod 'SwiftyJSON'
-  pod 'IQKeyboardManager'
   pod 'UITextView+Placeholder'
+  pod 'UnsplashPhotoPicker'
 
 end

@@ -1,44 +1,40 @@
 PODS:
-  - 1PasswordExtension (1.8.5)
   - Alamofire (4.8.2)
   - DZNEmptyDataSet (1.8.1)
-  - IQKeyboardManager (6.3.0)
   - MBProgressHUD (1.1.0)
   - MJRefresh (3.2.0)
   - SwiftyJSON (5.0.0)
   - "UITextView+Placeholder (1.2.1)"
+  - UnsplashPhotoPicker (1.0.1)
 
 DEPENDENCIES:
-  - 1PasswordExtension
   - Alamofire
   - DZNEmptyDataSet
-  - IQKeyboardManager
   - MBProgressHUD
   - MJRefresh
   - SwiftyJSON
   - "UITextView+Placeholder"
+  - UnsplashPhotoPicker
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - 1PasswordExtension
     - Alamofire
     - DZNEmptyDataSet
-    - IQKeyboardManager
     - MBProgressHUD
     - MJRefresh
     - SwiftyJSON
     - "UITextView+Placeholder"
+    - UnsplashPhotoPicker
 
 SPEC CHECKSUMS:
-  1PasswordExtension: 0e95bdea64ec8ff2f4f693be5467a09fac42a83d
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  IQKeyboardManager: 2ca9d64893247556f53523dcd8d78641f0ba7c23
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
+  UnsplashPhotoPicker: 3669aef6d3cd8bc45f19d681eef0af5920325c79
 
-PODFILE CHECKSUM: ba5a205e5add30c5dab4765ca9dd19d70b35595f
+PODFILE CHECKSUM: 5d6c93118baad6c3ee65b157261aad8ff7562c8b
 
 COCOAPODS: 1.7.0.rc.2
